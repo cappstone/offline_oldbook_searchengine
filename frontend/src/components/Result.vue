@@ -49,11 +49,11 @@
 
     <div id="yes" v-else>
       <ul class="book-card" v-for="key in book[0]" v-bind:key="key" style="margin-bottom:1vw; padding:25px">
-        <li style="list-style-type:none">
-          <b style="font-size:2vw">{{key.mall}}</b>
+        <li style="list-style-type: none">
+          <b style="font-size: 2vw">{{key.mall}}</b>
           <ul v-for="resultkey in key.result" v-bind:key="resultkey">
             <li v-if="resultkey!='검색 결과 없음'">
-              <b>{{resultkey.bookname}}</b>
+              <b style="font-size: 1.5vw">{{resultkey.bookname}}</b>
               <div>{{resultkey.description}}</div>
               <div>{{resultkey.location}}이 {{resultkey.price}} 가격으로 있습니다.</div>
               <br>
