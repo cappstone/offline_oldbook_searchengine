@@ -53,7 +53,7 @@
           <b style="font-size: 2vw">{{key.mall}}</b>
           <ul v-for="resultkey in key.result" v-bind:key="resultkey">
             <li v-if="resultkey!='검색 결과 없음'">
-              <b style="font-size: 1.5vw">{{resultkey.bookname}}</b>
+              <b style="font-size: 1.2vw">{{resultkey.bookname}}</b>
               <div>{{resultkey.description}}</div>
               <div>{{resultkey.location}}이 {{resultkey.price}} 가격으로 있습니다.</div>
               <br>
