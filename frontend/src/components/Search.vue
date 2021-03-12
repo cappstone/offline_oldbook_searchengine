@@ -25,8 +25,8 @@ export default {
     },
     getData: function() {
       var vue = this;
-      //vue.searchurl='http://sc0nep.iptime.org:8000/search?word='+String(vue.searchname)+'&mode='+String(vue.searchstore)
-      vue.searchurl='http://localhost:8000/search?word='+String(vue.searchname)+'&mode='+String(vue.searchstore) //서버 맛갔을때 디버그용
+      vue.searchurl='http://sc0nep.iptime.org:7000/search?word='+String(vue.searchname)+'&mode='+String(vue.searchstore)
+      //vue.searchurl='http://localhost:7000/search?word='+String(vue.searchname)+'&mode='+String(vue.searchstore) //서버 맛갔을때 디버그용
       axios.get(vue.searchurl)
         .then(function(response) { 
           //console.log(response.data);

@@ -1,5 +1,14 @@
+/* eslint-disable */
+
 module.exports = {
-    devServer: {
-        proxy: 'http://localhost:8000/search?word=vue.js&mode=0'
+    configureWebpack: {
+        devServer: {
+            disableHostCheck: true,
+            proxy: {
+                '/api': {
+                    target: 'http://sc0nep.iptime.org:7000'
+                }
+            }
+        }
     }
-}
+};
