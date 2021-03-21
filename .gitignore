@@ -322,6 +322,7 @@ dmypy.json
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
+*.vscode
 
 ### Windows ###
 # Windows thumbnail cache files
@@ -348,5 +349,8 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# ETC
+*.json
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,python,intellij+all,pycharm+all,vscode,windows
