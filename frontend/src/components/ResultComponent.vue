@@ -1,8 +1,9 @@
 <template>
+  
   <div v-if="book[0]!=''">
     <div v-if="book[1]=='0'">
 
-      <div v-for="(book,bookey) in book[0]" v-bind:key="bookey" v-bind:class="['book-card', {'accordion-open': accordionOpen.includes(bookey)}]">
+      <div v-for="(book,bookey) in book[0]" v-bind:key="bookey" v-bind:class="['book-card']">
         <table class="book-aladin-info">
           <tr>
             <td rowspan="4" class="book-aladin-img">
@@ -14,7 +15,7 @@
             <td class="book-aladin-desc">{{book.description}}</td>
           </tr>
           <tr>
-            <td><b>{{book.stores}}</b></td>
+            <td class="book-aladin-store"><b>{{book.stores}}</b></td>
           </tr>
           <tr>
             <td class="temp">
@@ -26,22 +27,7 @@
           </tr>
         </table>
 
-        <div class="book-aladin-result">
-          <div v-for="(result,resultkey) in book.result" v-bind:key="resultkey">
-            <div class="book-aladin-place">{{result.mall}}</div>
-              <div class="book-aladin-status" v-for="(status,statuskey) in result.status_stock" v-bind:key="statuskey">
-                <table class="book-aladin-stock">
-                  <tr>
-                    <td class="book-aladin-location">{{status.location}}</td>
-                    <td rowspan="2" class="book-aladin-price">{{status.price}}</td>
-                  </tr>
-                  <tr>
-                    <td class="book-aladin-quality">{{status.quality}}급</td>
-                  </tr>
-                </table>
-              </div>
-          </div>
-        </div>
+        <Modal v-if="showModal==true && showIndex==bookey" v-on:close="showModal=false" v-bind:details="book.result"></Modal>
 
       </div>
 
@@ -69,22 +55,25 @@
 </template>
 
 <script>
+import Modal from './common/ResultModal.vue'
 export default {
     props:['book'],
 
     data: function() {
       return {
-        accordionOpen:[]
+        showIndex: '',
+        showModal: false
       }
+    },
+
+    components:{
+      Modal
     },
 
     methods:{
       moreView: function(index){
-        if (this.accordionOpen.includes(index)) {
-          this.accordionOpen = this.accordionOpen.filter(i => i != index)
-          return
-        }
-        this.accordionOpen.push(index);
+        this.showIndex=index;
+        this.showModal=true;
       }
     }
 }
@@ -107,13 +96,7 @@ export default {
   }
 
   .book-card:hover {
-    box-shadow: 0 16px 32px 0 rgba(99,230,138,0.6);
-  }
-
-  
-  .book-card:not(.accordion-open) .book-aladin-result {
-    height:0;
-    overflow:hidden;
+    box-shadow: 0 8px 16px 0 rgba(99,230,138,0.6);
   }
 
   .book-aladin-info {
@@ -130,7 +113,7 @@ export default {
     text-align: left;
     vertical-align: top;
 
-    overflow:auto;
+    height:2vw;
   }
 
   .book-aladin-img {
@@ -149,6 +132,12 @@ export default {
     vertical-align: top;
     padding: 0;
     margin: 0;
+
+    height:1vw;
+  }
+
+  .book-aladin-store {
+    vertical-align: bottom;
   }
 
   .book-aladin-button {
@@ -159,7 +148,7 @@ export default {
     background-color: white;
     cursor: pointer;
   }
-
+/*
   .book-aladin-result {
     padding: 0 15px 0 20px;
     max-height:100%;
@@ -184,4 +173,5 @@ export default {
     font-size: 2vw;
     font-weight: 800;
   }
+*/
 </style>

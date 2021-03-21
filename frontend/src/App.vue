@@ -1,16 +1,16 @@
 <template>
   <div>
     <Header/>
-    <Search v-on:dataemit="dataEmit"></Search>
+    <Search v-on:data-to-upper="dataEmit"></Search>
     <br><br><br>
     <Result v-bind:book="emittedbook"></Result>
   </div>
 </template>
 
 <script>
-import Header from './components/Header.vue'
-import Search from './components/Search.vue'
-import Result from './components/Result.vue'
+import Header from './components/TheHeader.vue'
+import Search from './components/SearchComponent.vue'
+import Result from './components/ResultComponent.vue'
 
 export default {
   data: function() {
