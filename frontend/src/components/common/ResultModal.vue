@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal">
+  <transition name="modal" appear>
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
@@ -8,29 +8,27 @@
           <div class="modal-header">
             <slot name="header">
               책 정보
+              <button class="modal-default-button" @click="$emit('close')"></button>
             </slot>
           </div>
 
           <!-- 모달 보디 -->
           <div class="modal-body">
             <slot name="body">
-              <div class="book-aladin-result">
-                <div v-for="(result,resultkey) in details" v-bind:key="resultkey">
-                  <div class="book-aladin-place">{{result.mall}}</div>
-                  <div class="book-aladin-status" v-for="(status,statuskey) in result.status_stock" v-bind:key="statuskey">
-                    <table class="book-aladin-stock">
-                      <tr>
-                        <td class="book-aladin-location">{{status.location}}</td>
-                        <td rowspan="2" class="book-aladin-price">{{status.price}}</td>
-                      </tr>
-                      <tr>
-                        <td class="book-aladin-quality">{{status.quality}}급</td>
-                      </tr>
-                    </table>
-                  </div>
+              <div v-for="(result,resultkey) in details" v-bind:key="resultkey">
+                <div class="book-aladin-place">{{result.mall}}</div>
+                <div class="book-aladin-status" v-for="(status,statuskey) in result.status_stock" v-bind:key="statuskey">
+                  <table class="book-aladin-stock">
+                    <tr>
+                      <td class="book-aladin-location">{{status.location}}</td>
+                      <td rowspan="2" class="book-aladin-price">{{status.price}}</td>
+                    </tr>
+                    <tr>
+                      <td class="book-aladin-quality">{{status.quality}}급</td>
+                    </tr>
+                  </table>
                 </div>
               </div>
-              <button class="modal-default-button" @click="$emit('close')">OK</button>
             </slot>
           </div>
 
@@ -65,7 +63,12 @@
   }
 
   .modal-container {
-    width: 600px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 70%;
+    max-height: 500px;
     margin: 0px auto;
     padding: 20px 30px;
     background-color: #fff;
@@ -73,6 +76,7 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
     transition: all .3s ease;
     font-family: Helvetica, Arial, sans-serif;
+    overflow-y: scroll;
   }
 
   .modal-header {
@@ -88,7 +92,13 @@
   }
 
   .modal-default-button {
-    float: right;
+    border: 2px solid black;
+    border-radius: 50%;
+    left: 50%;
+    bottom: 35px;
+    width: 30px;
+    height: 30px;
+    background-color: #ffffff;
   }
 
   /*
@@ -112,14 +122,6 @@
   .modal-leave-active .modal-container {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
-  }
-
-    .book-aladin-result {
-    padding: 0 15px 0 20px;
-    max-height:100%;
-    overflow:hidden;
-    background-color: white;
-    transition: max-height 0.5s ease-in-out; 
   }
   
   .book-aladin-place {

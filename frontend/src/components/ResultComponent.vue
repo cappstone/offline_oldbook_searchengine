@@ -3,7 +3,7 @@
   <div v-if="book[0]!=''">
     <div v-if="book[1]=='0'">
 
-      <div v-for="(book,bookey) in book[0]" v-bind:key="bookey" v-bind:class="['book-card']">
+      <div class="book-card" v-for="(book,bookey) in book[0]" v-bind:key="bookey">
         <table class="book-aladin-info">
           <tr>
             <td rowspan="4" class="book-aladin-img">
@@ -19,10 +19,10 @@
           </tr>
           <tr>
             <td class="temp">
-              <button class="book-aladin-button" v-on:click="moreView(bookey)">
-                <label for="book-aladin-button" v-if="book.result==''"><b>재고 없음</b></label>
-                <label for="book-aladin-button" v-else><b>자세히</b></label>
+              <button class="book-aladin-button" v-if="book.result!=''" v-on:click="moreView(bookey)">
+                <label for="book-aladin-button"><b>자세히</b></label>
               </button>
+              <div v-else style="text-align:left; color:red"><b>재고 없음</b></div>
             </td>
           </tr>
         </table>
@@ -75,6 +75,16 @@ export default {
         this.showIndex=index;
         this.showModal=true;
       }
+    },
+
+    watch: {
+      showModal: function() {
+        if(this.showModal==true){
+          document.documentElement.style.overflow="hidden";
+          return;
+        }
+        document.documentElement.style.overflow="auto";
+      }
     }
 }
 </script>
@@ -88,9 +98,8 @@ export default {
 
     background-color: white;
 
-    max-width: 63%;
+    max-width: 70%;
     height: auto;
-    position: relative;
 
     transition: all 0.3s ease;
   }
@@ -148,6 +157,7 @@ export default {
     background-color: white;
     cursor: pointer;
   }
+
 /*
   .book-aladin-result {
     padding: 0 15px 0 20px;
