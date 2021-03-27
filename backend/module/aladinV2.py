@@ -9,6 +9,7 @@ from asyncio.tasks import gather
 from bs4 import BeautifulSoup
 import bs4.element
 from url_request import request
+import requests
 import json
 import time
 import asyncio
@@ -58,6 +59,9 @@ class Aladin:
                 parsed_item = self.__searchresult(item)
                 parsed_item['id'] = i
                 Aladin.search_result.append(parsed_item)
+            print(Aladin.search_result)
+
+            
 
     # 크롤링하다가 문제가 발생한 경우에 대해서 에러로그를 리턴해서 프론트엔드쪽으로 전달해주기
     def error_return(self) -> Dict:
@@ -65,18 +69,9 @@ class Aladin:
 
     # 검색페이지에 뜨는 아이템들 싹다 크롤링 해오는 함수
     def __searchresult(self, bs4_element) -> Dict:
-        # 한개의 아이템에 대한 dict형태
-        item: dict = {
-            'id': '',  # index
-            'bookname': '',  # 책이름
-            'description': '',  # 책설명
-            'imgurl': '',  # 책 이미지 주소
-            'mall': ''  # 재고있는 매장의 목록
-        }
-
         # 책 제목 가져오기
         title: bs4.element.Tag = bs4_element.find('b', class_='bo3').text
-
+        
         # 책 설명 가져오기
         tag_li: bs4.element.ResultSet = bs4_element.find_all('li')
         description: str = tag_li[1].text
@@ -92,21 +87,32 @@ class Aladin:
             shopurl: str = item.attrs['href']
             instock_shop.setdefault(shopname, shopurl)
 
-        item['bookname'] = title
-        item['description'] = description
-        item['imgurl'] = imgurl
-        item['mall'] = list(instock_shop.items())
+        # item["bookname"] = title
+        # item['description'] = description
+        # item['imgurl'] = imgurl
+        # item['mall'] = list(instock_shop.keys())
+
+        # 한개의 아이템에 대한 dict형태
+        item: Dict = {
+            "id": "",  # index
+            "bookname": title,  # 책이름
+            "description": description,  # 책설명
+            "imgurl": imgurl,  # 책 이미지 주소
+            "mall": list(instock_shop.keys()), # 재고있는 매장의 목록
+            "stock": Aladin.Item(instock_shop.items()).stock_info()
+        }
+
         return item
 
     # 검색결과 아이템에 재고가 존재하는 중고매장의 재고정보를 가져오는 서브클래스
     class Item:
-        def __init__(self, mall_list: Tuple):
+        def __init__(self, mall_list: Tuple) -> None:
             self.mall_list: Tuple = mall_list
 
             # 비동기 크롤링 실행
             self.loop = asyncio.new_event_loop()
             asyncio.set_event_loop(self.loop)
-            stock_info_list: List = self.loop.run_until_complete(
+            self.stock_info_list: List = self.loop.run_until_complete(
                 self.__scrap_processing())
             self.loop.close()
 
@@ -117,7 +123,7 @@ class Aladin:
                                for url in self.mall_list]  # 크롤링 해야하는 매장 주소
 
             # 작성 해야함
-            futures = [asyncio.ensure_future(None, self.__stock_info(url) for url in task_list)]
+            futures = [asyncio.ensure_future(self.__stock_info_scrap(url)) for url in task_list]
             result: List = await asyncio.gather(*futures)
 
             # dict형태로 데이터 재정의
@@ -129,45 +135,49 @@ class Aladin:
                 }
                 stock_list.append(mall)
 
+            return stock_list
+
         # 매장에 있는 데이터들을 싹다 가져와서 반영함
 
-        async def __stock_info(self, url: str) -> Tuple:
+        async def __stock_info_scrap(self, url: str) -> Tuple:
             # 재고가 있는 매장의 데이터를 요청해서 가져옴
-            response: Tuple[str, bool, Dict] = self.loop.run_in_executor(
-                None, request, url)
-            html: str = ""
+            # response: Tuple[str, bool, Dict] = request(url)
+            response: str = await self.loop.run_in_executor(None, requests.get, url)
 
             # 재고 관련된 변수
             stock: List = []  # 내가 검색하는 아이템의 매장재고 정보를 보관하는 리스트
 
-            # response의 bool의 리턴값을 확인
-            # response bool값이 참이 아닌경우
-            if response[1] is False:
-                print(response[2])
-                Aladin.error_return()
-            # response bool값이 참인경우
-            else:
-                self.html: str = response[0]
-                self.soup = BeautifulSoup(response, "lxml")
-                get_stock: bs4.element.ResultSet = self.soup.find_all(
-                    "div", class__="ss_book_box")  # 매장에 책 재고 있는 만큼 정보 가져오기
+            # html: str = response[0]
+            html: str = response.text
+            soup = await self.loop.run_in_executor(None, BeautifulSoup, html, "lxml")
+            
+            # 매장에 책 재고 있는 만큼 정보 가져오기
+            get_stock: bs4.element.ResultSet = soup.find_all(
+                "div", class_="ss_book_box")
 
-                # 매장재고수 만큼 가져와서 반복함
-                for index, stock_item in enumerate(get_stock):
+            # 매장재고수 만큼 가져와서 반복함
+            for index, stock_item in enumerate(get_stock):
 
-                    price: bs4.element.Tag = stock_item.find(
-                        "span", class_="ss_p2").text  # 매장의 책 가격
-                    quality: bs4.element.Tag = stock_item.find(
-                        "span", class_="us_f_bob").text.strip()  # 매장의 책 상태
-                    location: bs4.element.Tag = stock_item.find_all("span", class_="ss_p3")[
-                        3].find("b").text[7:].strip()  # 책이 있는 위치
+                price: bs4.element.Tag = stock_item.find(
+                    "span", class_="ss_p2").text  # 매장의 책 가격
+                quality: bs4.element.Tag = stock_item.find(
+                    "span", class_="us_f_bob").text.strip()  # 매장의 책 상태
+                location: bs4.element.Tag = stock_item.find_all("span", class_="ss_p3")[
+                    3].find("b").text[7:].strip()  # 책이 있는 위치
 
-                    # 매장안에 있는 책의 정보들 json으로 저장
-                    item: Dict = {"stock_id": index, "price": price,
-                                  "quality": quality, "location": location}
-                    stock.append(item)
+                # 매장안에 있는 책의 정보들 json으로 저장
+                item: Dict = {
+                            "stock_id": index, 
+                            "price": price,
+                            "quality": quality, 
+                            "location": location
+                }
+                stock.append(item)
             return stock
+
+        def stock_info(self) -> List:
+            return self.stock_info_list
 
 
 if __name__ == "__main__":
-    a = Aladin("파이썬")
+    a = Aladin("다빈치코드")
