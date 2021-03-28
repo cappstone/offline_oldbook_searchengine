@@ -26,7 +26,7 @@ class Aladin:
     """
 
     # 검색결과 저장하는 클래스 변수
-    search_result: List[Dict] = []
+    search_result: Dict = None
 
     def __init__(self, keyword: str) -> None:
         starttime = time.time()
@@ -55,14 +55,21 @@ class Aladin:
             self.item_quantity: int = len(self.items)
 
             # 검색결과에 대한 데이터가 dict형태로 담겨있는 리스트 변수
-            self.result: List = []
+            result: List[Dict] = []
 
             # 검색페이지 크롤링 실행 --> 병렬 처리할 수 있게 처리 예정
             for i, item in enumerate(self.items):
                 parsed_item = self.__searchresult(item)
                 parsed_item['id'] = i
-                Aladin.search_result.append(parsed_item)
-            # print(Aladin.search_result[0])
+                result.append(parsed_item)
+
+            # 검색결과에 대해서 dict타입의 형태로 작성하기
+            Aladin.search_result = {
+                "keyword" : keyword,
+                "search_total" : len(result),
+                "result" : result
+            }
+
             print("time :", time.time() - starttime)
 
     # 크롤링하다가 문제가 발생한 경우에 대해서 에러로그를 리턴해서 프론트엔드쪽으로 전달해주기
@@ -106,6 +113,7 @@ class Aladin:
             "bookname": title,  # 책이름
             "description": description,  # 책설명
             "imgurl": imgurl,  # 책 이미지 주소
+            "mallCount" : len(list(instock_shop.keys())), # 재고가 있는 매장 개수
             "mall": list(instock_shop.keys()),  # 재고있는 매장의 목록
             # 매장별로 저장한 재고데이터 (이중 리스트타입 변수)
             "stock": Aladin.Item(instock_shop.items()).stock_info()
@@ -113,7 +121,7 @@ class Aladin:
 
         return item
 
-    def result(self) -> None:
+    def result(self) -> Dict:
         return Aladin.search_result
 
     # 검색결과 아이템에 재고가 존재하는 중고매장의 재고정보를 가져오는 서브클래스
@@ -176,7 +184,7 @@ class Aladin:
                 mall_data: Dict = {
                     "mall_id": i,  # 몇번쨰 중고매장인지
                     "mallName": mall[0],  # 중고 매장 이름
-                    "stock_count": len(result[i]),  # 재고수
+                    "stockCount": len(result[i]),  # 재고수
                     "stock": result[i]  # 재고 데이터가 담긴 리스트 타입변수
                 }
 
