@@ -126,10 +126,9 @@ class Search_result(Searchpage):
     def return_data(self):
         return self.result
 
-'''
+
 if __name__ == "__main__":
-    a = Searchpage("다빈치코드")
-    a.print_searchdata()
-    #b = Search_result(a.return_data(), 1)
-   # b.print_data()
-'''
+    #a = Searchpage("python")
+    #a.print_searchdata()
+    b = Search_result("다빈치코드")
+    #b.print_data()
