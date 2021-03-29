@@ -1,9 +1,9 @@
 {
-  "name": "test",
-  "version": "0.1.0",
+  "name": "used-book-searchengine",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --host 0.0.0.0 --disableHostCheck true",
+    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
@@ -13,6 +13,8 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@fortawesome/vue-fontawesome": "^2.0.2",
     "core-js": "^3.6.5",
+    "node-sass": "^5.0.0",
+    "sass-loader": "^10.1.1",
     "vue": "^2.6.11"
   },
   "devDependencies": {

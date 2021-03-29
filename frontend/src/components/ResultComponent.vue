@@ -1,8 +1,9 @@
 <template>
+  
   <div v-if="book[0]!=''">
     <div v-if="book[1]=='0'">
 
-      <div v-for="(book,bookey) in book[0]" v-bind:key="bookey" v-bind:class="['book-card', {'accordion-open': accordionOpen.includes(bookey)}]">
+      <div class="book-card" v-for="(book,bookey) in book[0]" v-bind:key="bookey">
         <table class="book-aladin-info">
           <tr>
             <td rowspan="4" class="book-aladin-img">
@@ -14,34 +15,19 @@
             <td class="book-aladin-desc">{{book.description}}</td>
           </tr>
           <tr>
-            <td><b>{{book.stores}}</b></td>
+            <td class="book-aladin-store"><b>{{book.mall}}</b></td>
           </tr>
           <tr>
             <td class="temp">
-              <button class="book-aladin-button" v-on:click="moreView(bookey)">
-                <label for="book-aladin-button" v-if="book.result==''"><b>재고 없음</b></label>
-                <label for="book-aladin-button" v-else><b>자세히</b></label>
+              <button class="book-aladin-button" v-if="book.stock!=''" v-on:click="moreView(bookey)">
+                <label for="book-aladin-button"><b>자세히</b></label>
               </button>
+              <div v-else style="text-align:left; color:red"><b>재고 없음</b></div>
             </td>
           </tr>
         </table>
 
-        <div class="book-aladin-result">
-          <div v-for="(result,resultkey) in book.result" v-bind:key="resultkey">
-            <div class="book-aladin-place">{{result.mall}}</div>
-              <div class="book-aladin-status" v-for="(status,statuskey) in result.status_stock" v-bind:key="statuskey">
-                <table class="book-aladin-stock">
-                  <tr>
-                    <td class="book-aladin-location">{{status.location}}</td>
-                    <td rowspan="2" class="book-aladin-price">{{status.price}}</td>
-                  </tr>
-                  <tr>
-                    <td class="book-aladin-quality">{{status.quality}}급</td>
-                  </tr>
-                </table>
-              </div>
-          </div>
-        </div>
+        <Modal v-if="showModal==true && showIndex==bookey" v-on:close="showModal=false" v-bind:details="book.stock"></Modal>
 
       </div>
 
@@ -49,18 +35,19 @@
 
     <div id="yes" v-else>
       <ul class="book-card" v-for="key in book[0]" v-bind:key="key" style="margin-bottom:1vw; padding:25px">
-        <li>
-          <b>{{key.mall}}</b>
-          <ol v-for="resultkey in key.result" v-bind:key="resultkey">
+        <li style="list-style-type: none">
+          <b style="font-size: 2vw">{{key.mall}}</b>
+          <ul v-for="resultkey in key.result" v-bind:key="resultkey">
             <li v-if="resultkey!='검색 결과 없음'">
-              <b>{{resultkey.bookname}}</b>
-              <p>{{resultkey.description}}</p>
+              <b style="font-size: 1.2vw">{{resultkey.bookname}}</b>
+              <div>{{resultkey.description}}</div>
               <div>{{resultkey.location}}이 {{resultkey.price}} 가격으로 있습니다.</div>
+              <br>
             </li>
             <li v-else>
               <div>현재 재고가 없습니다.</div>
             </li>
-          </ol>
+          </ul>
         </li>
       </ul>
     </div>
@@ -68,22 +55,35 @@
 </template>
 
 <script>
+import Modal from './common/ResultModal.vue'
 export default {
     props:['book'],
 
     data: function() {
       return {
-        accordionOpen:[]
+        showIndex: '',
+        showModal: false
       }
+    },
+
+    components:{
+      Modal
     },
 
     methods:{
       moreView: function(index){
-        if (this.accordionOpen.includes(index)) {
-          this.accordionOpen = this.accordionOpen.filter(i => i != index)
-          return
+        this.showIndex=index;
+        this.showModal=true;
+      }
+    },
+
+    watch: {
+      showModal: function() {
+        if(this.showModal==true){
+          document.documentElement.style.overflow="hidden";
+          return;
         }
-        this.accordionOpen.push(index);
+        document.documentElement.style.overflow="auto";
       }
     }
 }
@@ -98,21 +98,14 @@ export default {
 
     background-color: white;
 
-    max-width: 63%;
+    max-width: 70%;
     height: auto;
-    position: relative;
 
     transition: all 0.3s ease;
   }
 
   .book-card:hover {
-    box-shadow: 0 16px 32px 0 rgba(99,230,138,0.6);
-  }
-
-  
-  .book-card:not(.accordion-open) .book-aladin-result {
-    height:0;
-    overflow:hidden;
+    box-shadow: 0 8px 16px 0 rgba(99,230,138,0.6);
   }
 
   .book-aladin-info {
@@ -129,7 +122,7 @@ export default {
     text-align: left;
     vertical-align: top;
 
-    overflow:auto;
+    height:2vw;
   }
 
   .book-aladin-img {
@@ -148,6 +141,12 @@ export default {
     vertical-align: top;
     padding: 0;
     margin: 0;
+
+    height:1vw;
+  }
+
+  .book-aladin-store {
+    vertical-align: bottom;
   }
 
   .book-aladin-button {
@@ -159,6 +158,7 @@ export default {
     cursor: pointer;
   }
 
+/*
   .book-aladin-result {
     padding: 0 15px 0 20px;
     max-height:100%;
@@ -183,4 +183,5 @@ export default {
     font-size: 2vw;
     font-weight: 800;
   }
+*/
 </style>
