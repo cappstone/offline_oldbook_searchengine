@@ -34,8 +34,8 @@
         if (vue.searchname!='') {
           axios.get(vue.searchurl).then(function(response) {
             //vue.display(response.data); //콘솔창 디버그용
-            vue.search=response.data.result;
-            if (vue.search==''){console.log("찾는 데이타가 없습니다")}
+            vue.search=response.data;
+            if (vue.search.result==''){alert("찾는 데이타가 없습니다")}
             vue.$emit('data-to-upper',[vue.search,vue.searchstore]);
           }).catch(function(error) {
             console.log(error);

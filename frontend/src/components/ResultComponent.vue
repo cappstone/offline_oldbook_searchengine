@@ -3,7 +3,7 @@
   <div v-if="book[0]!=''">
     <div v-if="book[1]=='0'">
 
-      <div class="book-card" v-for="(book,bookey) in book[0]" v-bind:key="bookey">
+      <div class="book-card" v-for="(book, bookey) in book[0].result" v-bind:key="bookey">
         <table class="book-aladin-info">
           <tr>
             <td rowspan="4" class="book-aladin-img">
@@ -15,14 +15,15 @@
             <td class="book-aladin-desc">{{book.description}}</td>
           </tr>
           <tr>
-            <td class="book-aladin-store"><b>{{book.mall}}</b></td>
+            <td class="book-aladin-store" v-if="book.mallCount!=0"><b>{{book.mallCount}}개의 지점에 책이 존재합니다.</b></td>
+            <td class="book-aladin-store" v-else><b>현재 모든 지점에 책이 없습니다.</b></td>
           </tr>
           <tr>
             <td class="temp">
               <button class="book-aladin-button" v-if="book.stock!=''" v-on:click="moreView(bookey)">
                 <label for="book-aladin-button"><b>자세히</b></label>
               </button>
-              <div v-else style="text-align:left; color:red"><b>재고 없음</b></div>
+              <div v-else></div>
             </td>
           </tr>
         </table>
@@ -95,6 +96,7 @@ export default {
     margin: 0 auto;
     margin-bottom: 2vw;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.3);
+    border-radius: 12px;
 
     background-color: white;
 
@@ -153,6 +155,7 @@ export default {
     width: 100%;
     height: 100%;
     border-style: groove;
+    border-radius: 6px;
     border-color: #557174;
     background-color: white;
     cursor: pointer;

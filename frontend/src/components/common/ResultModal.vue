@@ -8,7 +8,7 @@
           <div class="modal-header">
             <slot name="header">
               책 정보
-              <button class="modal-default-button" @click="$emit('close')"></button>
+              <button class="modal-default-button" @click="$emit('close')"><i class="fas fa-times fa-3x"></i></button>
             </slot>
           </div>
 
@@ -20,7 +20,7 @@
                 <div class="book-aladin-status" v-for="(status,statuskey) in result.stock" v-bind:key="statuskey">
                   <table class="book-aladin-stock">
                     <tr>
-                      <td class="book-aladin-location">{{status.location}}</td>
+                      <td class="book-aladin-location"><b>{{status.location}}</b></td>
                       <td rowspan="2" class="book-aladin-price">{{status.price}}</td>
                     </tr>
                     <tr>
@@ -92,13 +92,14 @@
   }
 
   .modal-default-button {
-    border: 2px solid black;
-    border-radius: 50%;
-    left: 50%;
-    bottom: 35px;
-    width: 30px;
-    height: 30px;
+    float: right;
+    border:none;
     background-color: #ffffff;
+  }
+
+  .modal-default-button:focus {
+    border:none;
+    outline:none;
   }
 
   /*
