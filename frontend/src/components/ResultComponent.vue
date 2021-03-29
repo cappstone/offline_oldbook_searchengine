@@ -15,11 +15,11 @@
             <td class="book-aladin-desc">{{book.description}}</td>
           </tr>
           <tr>
-            <td class="book-aladin-store"><b>{{book.stores}}</b></td>
+            <td class="book-aladin-store"><b>{{book.mall}}</b></td>
           </tr>
           <tr>
             <td class="temp">
-              <button class="book-aladin-button" v-if="book.result!=''" v-on:click="moreView(bookey)">
+              <button class="book-aladin-button" v-if="book.stock!=''" v-on:click="moreView(bookey)">
                 <label for="book-aladin-button"><b>자세히</b></label>
               </button>
               <div v-else style="text-align:left; color:red"><b>재고 없음</b></div>
@@ -27,7 +27,7 @@
           </tr>
         </table>
 
-        <Modal v-if="showModal==true && showIndex==bookey" v-on:close="showModal=false" v-bind:details="book.result"></Modal>
+        <Modal v-if="showModal==true && showIndex==bookey" v-on:close="showModal=false" v-bind:details="book.stock"></Modal>
 
       </div>
 
