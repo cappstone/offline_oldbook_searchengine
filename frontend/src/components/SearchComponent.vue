@@ -34,12 +34,13 @@
         if (vue.searchname!='') {
           axios.get(vue.searchurl).then(function(response) {
             //vue.display(response.data); //콘솔창 디버그용
-            vue.search=response.data;
+            vue.search=response.data.result;
             if (vue.search==''){console.log("찾는 데이타가 없습니다")}
             vue.$emit('data-to-upper',[vue.search,vue.searchstore]);
           }).catch(function(error) {
             console.log(error);
             alert('치명적인 오류가 발생했습니다. 다시 시도해 주세요.\n오류명 : '+error);
+            vue.isLoading=false; //스피너 끄기
           });
         }
         else { //검색어 안입력했을때

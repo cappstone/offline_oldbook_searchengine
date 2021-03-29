@@ -16,8 +16,8 @@
           <div class="modal-body">
             <slot name="body">
               <div v-for="(result,resultkey) in details" v-bind:key="resultkey">
-                <div class="book-aladin-place">{{result.mall}}</div>
-                <div class="book-aladin-status" v-for="(status,statuskey) in result.status_stock" v-bind:key="statuskey">
+                <div class="book-aladin-place">{{result.mallName}}</div>
+                <div class="book-aladin-status" v-for="(status,statuskey) in result.stock" v-bind:key="statuskey">
                   <table class="book-aladin-stock">
                     <tr>
                       <td class="book-aladin-location">{{status.location}}</td>
