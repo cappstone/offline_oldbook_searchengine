@@ -30,7 +30,7 @@ class Aladin:
 
     def __init__(self, keyword: str) -> None:
         starttime = time.time()
-        print("검색키워드: " + keyword + " - Aladin크롤링시작")
+        print("검색키워드: " + keyword + " - AladinV2 크롤링시작")
 
         # 알라딘 검색 페이지로부터 webpage를 호출하여 가져온다.
         self.response: Tuple[str, bool, Dict] = request(URL + keyword)
@@ -137,7 +137,7 @@ class Aladin:
             self.loop.close()
 
         # __stock_info코루틴 함수 관리하는 비동기 코루틴 함수
-        async def __scrap_processing(self, divide_loop: int = 10) -> Tuple:
+        async def __scrap_processing(self, divide_loop: int = 5) -> Tuple:
             stock_list: List = []  # 데이터 처리가 완료된 재고 목록들 저장하는 리스트
             task_list: List[List[str]] = []  # 크롤링 할 mall 목록이 담겨 있는 리스트 타입 변수
             # 요청할 mall url의 개수가 담긴 변수
