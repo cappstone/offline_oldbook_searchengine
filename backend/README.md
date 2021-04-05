@@ -1,4 +1,4 @@
-# offline_used_bookmall_search
+# Backend
 yes24, 알라딘 오프라인 중고 서점 크롤링 모듈
 
 ## Spec
