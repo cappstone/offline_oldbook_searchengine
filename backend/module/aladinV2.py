@@ -18,8 +18,6 @@ import asyncio
 URL = 'https://www.aladin.co.kr/search/wsearchresult.aspx?SearchTarget=UsedStore&KeyTag=&SearchWord='
 
 
-
-
 class Aladin:
     """
     알라딘 검색 페이지를 크롤링하는 메인 클래스
@@ -65,9 +63,9 @@ class Aladin:
 
             # 검색결과에 대해서 dict타입의 형태로 작성하기
             Aladin.search_result = {
-                "keyword" : keyword,
-                "search_total" : len(result),
-                "result" : result
+                "keyword": keyword,
+                "search_total": len(result),
+                "result": result
             }
 
             print("time :", time.time() - starttime)
@@ -113,7 +111,7 @@ class Aladin:
             "bookname": title,  # 책이름
             "description": description,  # 책설명
             "imgurl": imgurl,  # 책 이미지 주소
-            "mallCount" : len(list(instock_shop.keys())), # 재고가 있는 매장 개수
+            "mallCount": len(list(instock_shop.keys())),  # 재고가 있는 매장 개수
             "mall": list(instock_shop.keys()),  # 재고있는 매장의 목록
             # 매장별로 저장한 재고데이터 (이중 리스트타입 변수)
             "stock": Aladin.Item(instock_shop.items()).stock_info()
@@ -233,6 +231,7 @@ class Aladin:
 
         def stock_info(self) -> List:
             return self.stock_info_list
+
 
 """
 if __name__ == "__main__":
