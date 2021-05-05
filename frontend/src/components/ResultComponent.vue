@@ -6,10 +6,16 @@
       <div class="book-card" v-for="(book, bookey) in book[0].result" v-bind:key="bookey">
         <table class="book-aladin-info">
           <tr>
-            <td rowspan="4" class="book-aladin-img">
+            <td rowspan="3" class="book-aladin-img">
               <img v-bind:src="book.imgurl">
             </td>
-            <td class="book_aladin_bookname">{{book.bookname}}</td>
+            <td class="book-aladin-bookname">{{book.bookname}}</td>
+            <td rowspan="3" class="book-aladin-button-container">
+              <button class="book-aladin-button" v-if="book.stock!=''" v-on:click="moreView(bookey)">
+                <label for="book-aladin-button"><b>자세히</b></label>
+              </button>
+              <div v-else></div>
+            </td>
           </tr>
           <tr>
             <td class="book-aladin-desc">{{book.description}}</td>
@@ -17,14 +23,6 @@
           <tr>
             <td class="book-aladin-store" v-if="book.mallCount!=0"><b>{{book.mallCount}}개의 지점에 책이 존재합니다.</b></td>
             <td class="book-aladin-store" v-else><b>현재 모든 지점에 책이 없습니다.</b></td>
-          </tr>
-          <tr>
-            <td class="temp">
-              <button class="book-aladin-button" v-if="book.stock!=''" v-on:click="moreView(bookey)">
-                <label for="book-aladin-button"><b>자세히</b></label>
-              </button>
-              <div v-else></div>
-            </td>
           </tr>
         </table>
 
@@ -100,7 +98,7 @@ export default {
 
     background-color: white;
 
-    max-width: 70%;
+    max-width: 60%;
     height: auto;
 
     transition: all 0.3s ease;
@@ -117,8 +115,8 @@ export default {
     table-layout: fixed;
   }
 
-  .book_aladin_bookname {
-    font-size: 2vw;
+  .book-aladin-bookname {
+    font-size: max(2vw, 36px);
     font-weight: 600;
     
     text-align: left;
@@ -135,10 +133,12 @@ export default {
   }
 
   .book-aladin-img img {
-    width:90%;
+    max-width:90%;
   }
 
   .book-aladin-desc {
+    font-size: max(1vw,12px);
+
     text-align: left;
     vertical-align: top;
     padding: 0;
@@ -148,16 +148,27 @@ export default {
   }
 
   .book-aladin-store {
-    vertical-align: bottom;
+    font-size: max(1.2vw, 15px);
+  }
+
+  .book-aladin-button-container {
+    text-align: right;
+    width: 10%;
+    background-color: #ccd1ff;
   }
 
   .book-aladin-button {
     width: 100%;
-    height: 100%;
-    border-style: groove;
-    border-radius: 6px;
-    border-color: #557174;
-    background-color: white;
+    
+    border-style:none;
+
+    cursor: pointer;
+
+    background-color: #ccd1ff;
+  }
+
+  .book-aladin-button label{
+    font-size: max(1.2vw, 15px);
     cursor: pointer;
   }
 
@@ -187,4 +198,38 @@ export default {
     font-weight: 800;
   }
 */
+
+@media screen and (max-width:768px) {
+  .book-card{
+    max-width:100%;
+    border-radius:0;
+    border-bottom:1px solid #557174;
+    margin:0;
+    box-shadow:none;
+  }
+  .book-card:first-child{
+    border-top:1px solid #557174;
+  }
+  .book-card:hover{
+    box-shadow:none;
+  }
+
+  .book-aladin-bookname{
+    font-size: max(1vw, 18px);
+  }
+
+  .book-aladin-info{
+    padding:0;
+  }
+
+  .book-aladin-img img{
+    object-fit: fill;
+    height:100px;
+  }
+
+  .book-aladin-button{
+    min-height:20px;
+    border-radius:0;
+  }
+}
 </style>
