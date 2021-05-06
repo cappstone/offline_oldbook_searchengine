@@ -91,7 +91,7 @@
 <style scoped>
   .search{
     height: 50px;
-    max-width: 60%;
+    max-width: 70%;
 
     border: 3px solid #557174;
     border-radius: 6px;
