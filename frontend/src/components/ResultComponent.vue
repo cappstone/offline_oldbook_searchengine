@@ -1,30 +1,24 @@
 <template>
   
   <div v-if="book[0]!=''">
-    <div v-if="book[1]=='0'">
+    <div class="book-container" v-if="book[1]=='0'">
 
       <div class="book-card" v-for="(book, bookey) in book[0].result" v-bind:key="bookey">
-        <table class="book-aladin-info">
+        <table class="book-aladin-info" v-on:click="moreView(bookey)">
           <tr>
             <td rowspan="4" class="book-aladin-img">
               <img v-bind:src="book.imgurl">
             </td>
-            <td class="book_aladin_bookname">{{book.bookname}}</td>
+          </tr>
+          <tr>
+            <td class="book-aladin-bookname">{{book.bookname}}</td>
           </tr>
           <tr>
             <td class="book-aladin-desc">{{book.description}}</td>
           </tr>
           <tr>
-            <td class="book-aladin-store" v-if="book.mallCount!=0"><b>{{book.mallCount}}개의 지점에 책이 존재합니다.</b></td>
-            <td class="book-aladin-store" v-else><b>현재 모든 지점에 책이 없습니다.</b></td>
-          </tr>
-          <tr>
-            <td class="temp">
-              <button class="book-aladin-button" v-if="book.stock!=''" v-on:click="moreView(bookey)">
-                <label for="book-aladin-button"><b>자세히</b></label>
-              </button>
-              <div v-else></div>
-            </td>
+            <td class="book-aladin-store-is" v-if="book.mallCount!=0"><b>{{book.mallCount}}개의 지점에 책이 존재합니다.</b></td>
+            <td class="book-aladin-store-none" v-else><b>현재 모든 지점에 책이 없습니다.</b></td>
           </tr>
         </table>
 
@@ -91,19 +85,24 @@ export default {
 </script>
 
 <style scoped>
+
+  .book-container {
+    text-align: center;
+  }
   
   .book-card {
-    margin: 0 auto;
-    margin-bottom: 2vw;
+    margin: 0.5vw;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.3);
     border-radius: 12px;
 
     background-color: white;
 
-    max-width: 70%;
-    height: auto;
+    max-width: 35%;
+    height: 200px;
 
     transition: all 0.3s ease;
+
+    display: inline-block;
   }
 
   .book-card:hover {
@@ -115,76 +114,80 @@ export default {
     width: 100%;
 
     table-layout: fixed;
+
+    cursor: pointer;
   }
 
-  .book_aladin_bookname {
-    font-size: 2vw;
+  .book-aladin-bookname {
+    font-size: max(1.3vw,18px);
     font-weight: 600;
     
-    text-align: left;
+    text-align:left;
     vertical-align: top;
 
-    height:2vw;
+    word-break:keep-all;
   }
 
   .book-aladin-img {
-    width: 20%;
-    text-align: center;
-    padding: 0;
+    text-align: left;
+    padding: 0px;
+    width: 118px;
+    height: 175px;
+
     border-collapse: collapse;
   }
 
   .book-aladin-img img {
-    width:90%;
+    width: 100%;
+    height: 100%;
+
+    display:block;
   }
 
   .book-aladin-desc {
+    font-size: max(1vw,12px);
+
     text-align: left;
     vertical-align: top;
-    padding: 0;
-    margin: 0;
 
-    height:1vw;
+    word-break:keep-all;
   }
 
-  .book-aladin-store {
-    vertical-align: bottom;
+  .book-aladin-store-is {
+    text-align: left;
+    font-size: max(1vw,14px);
+  }
+  .book-aladin-store-none {
+    text-align: left;
+    font-size: max(1vw,14px);
+    color: #c64756;
   }
 
-  .book-aladin-button {
-    width: 100%;
-    height: 100%;
-    border-style: groove;
-    border-radius: 6px;
-    border-color: #557174;
-    background-color: white;
-    cursor: pointer;
+@media screen and (max-width:768px) {
+  .book-card{
+    max-width:95%;
+    height: auto;
+    border-radius:0;
+    border: 1px solid #557174;
+    box-shadow:none;
+  }
+  .book-card:hover{
+    box-shadow:none;
   }
 
-/*
-  .book-aladin-result {
-    padding: 0 15px 0 20px;
-    max-height:100%;
-    overflow:hidden;
-    background-color: white;
-    transition: max-height 0.5s ease-in-out; 
-  }
-  
-  .book-aladin-place {
-    font-size: 1.5vw;
-    font-weight:600;
-    border-bottom: 1px groove #557174;
+  .book-aladin-info{
+    padding:0;
+    margin:0;
   }
 
-  .book-aladin-stock {
-    padding: 5px;
-    width:100%;
+  .book-aladin-img{
+    height: 100px;
+    width: 67px;
   }
 
-  .book-aladin-price {
-    text-align: right;
-    font-size: 2vw;
-    font-weight: 800;
+  .book-aladin-button{
+    min-height:20px;
+    border-radius:0;
   }
-*/
+}
 </style>

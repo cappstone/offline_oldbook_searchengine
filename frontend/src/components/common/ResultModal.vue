@@ -3,12 +3,11 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-
+          <button class="modal-default-button" @click="$emit('close')"><i class="fas fa-times fa-3x"></i></button>
           <!-- 모달 헤더 -->
           <div class="modal-header">
             <slot name="header">
               책 정보
-              <button class="modal-default-button" @click="$emit('close')"><i class="fas fa-times fa-3x"></i></button>
             </slot>
           </div>
 
@@ -20,11 +19,11 @@
                 <div class="book-aladin-status" v-for="(status,statuskey) in result.stock" v-bind:key="statuskey">
                   <table class="book-aladin-stock">
                     <tr>
-                      <td class="book-aladin-location"><b>{{status.location}}</b></td>
+                      <td class="book-aladin-location"><b>{{status.location}}에 위치</b></td>
                       <td rowspan="2" class="book-aladin-price">{{status.price}}</td>
                     </tr>
                     <tr>
-                      <td class="book-aladin-quality">{{status.quality}}급</td>
+                      <td class="book-aladin-quality">{{status.quality}}급 품질</td>
                     </tr>
                   </table>
                 </div>
@@ -70,8 +69,8 @@
     width: 70%;
     max-height: 500px;
     margin: 0px auto;
-    padding: 20px 30px;
-    background-color: #fff;
+    padding: 0px;
+    background-color: #ffffff;
     border-radius: 2px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
     transition: all .3s ease;
@@ -80,21 +79,23 @@
   }
 
   .modal-header {
-    margin-top: 0;
+    margin-top: 10px;
     color: #8db596;
-    font-size:2vw;
+    font-size:max(1.5vw,24px);
     font-weight:800;
     text-align:center;
   }
 
   .modal-body {
-    margin: 20px 0;
+    margin: 20px 20px 10px 20px;
   }
 
   .modal-default-button {
     float: right;
     border:none;
     background-color: #ffffff;
+
+    font-size: 10px;
   }
 
   .modal-default-button:focus {
@@ -126,7 +127,7 @@
   }
   
   .book-aladin-place {
-    font-size: 1.5vw;
+    font-size: max(1.2vw,15px);
     font-weight:600;
     border-bottom: 1px groove #557174;
   }
@@ -136,9 +137,13 @@
     width:100%;
   }
 
+  .book-alaidn-quality {
+    font-size: max(1vw, 12px);
+  }
+
   .book-aladin-price {
     text-align: right;
-    font-size: 2vw;
+    font-size: max(1.2vw,18px);
     font-weight: 800;
   }
 </style>
