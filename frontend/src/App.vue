@@ -38,4 +38,10 @@ export default {
 body {
   background-color: #F6F6F6;
 }
+@media screen and (max-width: 768px) {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+}
 </style>

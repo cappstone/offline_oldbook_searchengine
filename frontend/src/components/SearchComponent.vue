@@ -1,12 +1,14 @@
 <template>
-  <div>
-    <section class="search">
-      <input v-on:keyup="checkEntered" v-model="searchname" placeholder="책이름">
-      <button v-on:click="getData"><i class="fas fa-search fa-2x search-icon"></i></button>
-    </section>
-    <div class="select">
-      <input type="radio" id="aladin" value="0" v-model="searchstore"><label for="aladin">Aladin</label>
-      <input type="radio" id="yes" value="1" v-model="searchstore"><label for="yes">Yes24</label>
+  <div class="search-wrapper">
+    <div class="search-container">
+      <div class="search">
+        <input v-on:keyup="checkEntered" v-model="searchname" placeholder="책이름">
+        <button v-on:click="getData"><i class="fas fa-search search-icon"></i></button>
+      </div>
+      <div class="select">
+        <input type="radio" id="aladin" value="0" v-model="searchstore"><label for="aladin">Aladin</label>
+        <input type="radio" id="yes" value="1" v-model="searchstore"><label for="yes">Yes24</label>
+      </div>
     </div>
     <Spinner v-bind:isVisible="isLoading"></Spinner>
   </div>
@@ -29,13 +31,13 @@
       },
       getData: function() {
         const vue = this;
-        vue.searchurl='http://sc0nep.iptime.org:7000/search?word='+String(vue.searchname)+'&mode='+String(vue.searchstore)
-        //vue.searchurl='http://localhost:7000/search?word='+String(vue.searchname)+'&mode='+String(vue.searchstore) //서버 맛갔을때 디버그용
+        //vue.searchurl='http://sc0nep.iptime.org:7000/search?word='+String(vue.searchname)+'&mode='+String(vue.searchstore)
+        vue.searchurl='http://localhost:7000/search?word='+String(vue.searchname)+'&mode='+String(vue.searchstore) //서버 맛갔을때 디버그용
         if (vue.searchname!='') {
           axios.get(vue.searchurl).then(function(response) {
             //vue.display(response.data); //콘솔창 디버그용
-            vue.search=response.data.result;
-            if (vue.search==''){console.log("찾는 데이타가 없습니다")}
+            vue.search=response.data;
+            if (vue.search.result==''){alert("찾는 데이타가 없습니다")}
             vue.$emit('data-to-upper',[vue.search,vue.searchstore]);
           }).catch(function(error) {
             console.log(error);
@@ -89,7 +91,7 @@
 <style scoped>
   .search{
     height: 50px;
-    max-width: 60%;
+    max-width: 70%;
 
     border: 3px solid #557174;
     border-radius: 6px;
@@ -143,6 +145,9 @@
 
   .search-icon{
     color: #ffffff;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: clamp(10px, 1.2vw, 30px);
   }
 
   .select{
@@ -161,4 +166,40 @@
     text-align:center;
   }
 
+  /* 모바일 환경 */
+  @media screen and (max-width: 768px){
+    .search{
+      height: 30px;
+      max-width: 100%;
+      border: 0px;
+      border-top: 1px solid #557174;
+      border-bottom: 1px solid #557174;
+      border-radius: 0;
+
+      margin:0;
+      padding:0;
+
+      position:inherit;
+    }
+
+    .search input{
+      font-size: 12px;
+    }
+
+    .search button{
+      border: 0;
+      border-left: 1px solid #557174;
+      border-radius: 0;
+    }
+
+    .select{
+      max-width: 100%;
+      height: 20px;
+      border:0;
+      border-radius:0;
+      border-bottom:1px solid #557174;
+      
+      margin:0;
+    }
+  }
 </style>
