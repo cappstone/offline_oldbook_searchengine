@@ -22,7 +22,7 @@
           </tr>
         </table>
 
-        <Modal v-if="showModal==true && showIndex==bookey" v-on:close="showModal=false" v-bind:details="book.stock"></Modal>
+        <Modal v-if="showModal==true && showIndex==bookey" v-on:close="showModal=false" v-bind:details="book.mall"></Modal>
 
       </div>
 

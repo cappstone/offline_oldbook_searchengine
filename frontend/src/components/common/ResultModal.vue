@@ -7,7 +7,7 @@
           <!-- 모달 헤더 -->
           <div class="modal-header">
             <slot name="header">
-              책 정보
+              재고 정보
             </slot>
           </div>
 
@@ -15,15 +15,15 @@
           <div class="modal-body">
             <slot name="body">
               <div v-for="(result,resultkey) in details" v-bind:key="resultkey">
-                <div class="book-aladin-place">{{result.mallName}}</div>
+                <div class="book-aladin-place"><b>{{result.mallName}}</b>에 {{result.stockCount}}개 존재</div>
                 <div class="book-aladin-status" v-for="(status,statuskey) in result.stock" v-bind:key="statuskey">
                   <table class="book-aladin-stock">
                     <tr>
-                      <td class="book-aladin-location"><b>{{status.location}}에 위치</b></td>
+                      <td class="book-aladin-location">위치: {{status.location}}</td>
                       <td rowspan="2" class="book-aladin-price">{{status.price}}</td>
                     </tr>
                     <tr>
-                      <td class="book-aladin-quality">{{status.quality}}급 품질</td>
+                      <td class="book-aladin-quality">품질: {{status.quality}}</td>
                     </tr>
                   </table>
                 </div>
@@ -81,13 +81,14 @@
   .modal-header {
     margin-top: 10px;
     color: #8db596;
-    font-size:max(1.5vw,24px);
+    font-size:max(1.3vw,18px);
     font-weight:800;
     text-align:center;
   }
 
   .modal-body {
     margin: 20px 20px 10px 20px;
+    text-align: left;
   }
 
   .modal-default-button {
@@ -127,23 +128,29 @@
   }
   
   .book-aladin-place {
-    font-size: max(1.2vw,15px);
-    font-weight:600;
+    font-size: max(1vw,14px);
     border-bottom: 1px groove #557174;
   }
 
   .book-aladin-stock {
     padding: 5px;
     width:100%;
-  }
-
-  .book-alaidn-quality {
-    font-size: max(1vw, 12px);
+    font-size: max(1vw,12px);
   }
 
   .book-aladin-price {
     text-align: right;
-    font-size: max(1.2vw,18px);
+    font-size: max(1vw,14px);
     font-weight: 800;
+  }
+
+  @media screen and (max-width:768px){
+    .modal-container{
+      width: 95%;
+    }
+
+    .modal-header{
+
+    }
   }
 </style>
