@@ -112,9 +112,10 @@ class Aladin:
             "description": description,  # 책설명
             "imgurl": imgurl,  # 책 이미지 주소
             "mallCount": len(list(instock_shop.keys())),  # 재고가 있는 매장 개수
-            "mall": list(instock_shop.keys()),  # 재고있는 매장의 목록
+            "mall": Aladin.Item(instock_shop.items()).stock_info()  # 재고있는 매장의 목록
+            # "mall": list(instock_shop.keys()),  # 재고있는 매장의 목록
             # 매장별로 저장한 재고데이터 (이중 리스트타입 변수)
-            "stock": Aladin.Item(instock_shop.items()).stock_info()
+            # "stock": Aladin.Item(instock_shop.items()).stock_info()
         }
 
         return item
