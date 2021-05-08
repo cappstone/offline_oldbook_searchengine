@@ -41,6 +41,14 @@ class SearchResult:
         # url조합
         url_list: List = (COMMON_URL + url + "&searchText=" + self.keyword for url in mall_codes)
 
+        # 검색된 북 타이틀들 기록하는 리스트
+        self.books: List = []
+
+        for i, url in enumerate(url_list):
+            self.__scrap_process(url, mall_names[i])
+
+        print(self.books)
+
 
     def __scrap_process(self, url, mall_name) -> Dict:
         source: str = requests.get(url).text
@@ -54,8 +62,14 @@ class SearchResult:
         else:
             tag_li: List = tag_ul.find_all("li")
             for j in tag_li:
-                # 책 제목 가져오는 거
+                # 책 제목 가져오는 부분
                 title: str = j.find("strong", class_="name").text.strip()
+
+                # 책이 books에 있는지 없는지 중복확인하고 저장
+                if title not in self.books:
+                    self.books.append(title)
+                else:
+                    pass
 
                 # 설명부분 text들 싹다 가져와서 합쳐버리기 - description 크롤링
                 tag_p: str = j.find("p", class_="storeG_pubGrp")
@@ -85,3 +99,7 @@ class SearchResult:
 
 
 # 아이템별로 검색결과 가져오는 클래스
+
+# test
+if __name__ == "__main__":
+    a = SearchResult("파이썬")
