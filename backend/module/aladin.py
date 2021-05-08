@@ -142,7 +142,7 @@ class Search_result(Searchpage):
 
 
 if __name__ == "__main__":
-    #a = Searchpage("python")
+    # a = Searchpage("python")
     # a.print_searchdata()
     b = Search_result("다빈치코드")
     # b.print_data()
