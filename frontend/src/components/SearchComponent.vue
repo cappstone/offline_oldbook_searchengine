@@ -9,6 +9,7 @@
         <input type="radio" id="aladin" value="0" v-model="searchstore"><label for="aladin">Aladin</label>
         <input type="radio" id="yes" value="1" v-model="searchstore"><label for="yes">Yes24</label>
       </div>
+      <br>
     </div>
     <Spinner v-bind:isVisible="isLoading"></Spinner>
   </div>

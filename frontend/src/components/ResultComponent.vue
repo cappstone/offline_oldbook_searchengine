@@ -2,6 +2,7 @@
   
   <div v-if="book[0]!=''">
     <div class="book-container" v-if="book[1]=='0'">
+      <div class="book-warning">상황에 따라 재고 정보가 실시간으로 변동될 수 있습니다.</div>
 
       <div class="book-card" v-for="(book, bookey) in book[0].result" v-bind:key="bookey">
         <table class="book-aladin-info" v-on:click="moreView(bookey)">
@@ -145,7 +146,7 @@ export default {
   }
 
   .book-aladin-desc {
-    font-size: max(1vw,12px);
+    font-size: max(0.9vw,10px);
 
     text-align: left;
     vertical-align: top;

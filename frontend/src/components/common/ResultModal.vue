@@ -15,15 +15,18 @@
           <div class="modal-body">
             <slot name="body">
               <div v-for="(result,resultkey) in details" v-bind:key="resultkey">
-                <div class="book-aladin-place"><b>{{result.mallName}}</b>에 {{result.stockCount}}개 존재</div>
+                <div class="book-aladin-place"><b>{{result.mallName}}</b> - {{result.stockCount}}개</div>
                 <div class="book-aladin-status" v-for="(status,statuskey) in result.stock" v-bind:key="statuskey">
                   <table class="book-aladin-stock">
                     <tr>
                       <td class="book-aladin-location">위치: {{status.location}}</td>
-                      <td rowspan="2" class="book-aladin-price">{{status.price}}</td>
+                      <td rowspan="3" class="book-aladin-price">{{status.price}}</td>
                     </tr>
                     <tr>
                       <td class="book-aladin-quality">품질: {{status.quality}}</td>
+                    </tr>
+                    <tr>
+                      <div id="book-aladin-map" style="width:500px;height:400px"></div>
                     </tr>
                   </table>
                 </div>
@@ -39,7 +42,34 @@
 
 <script>
   export default {
-    props:['details']
+    props:['details'],
+
+    mounted: function() {
+      if (window.kakao && window.kakao.maps) {
+        this.initMap();
+      }
+      else {
+        this.addKakaoMapScript();
+      }
+    },
+
+    methods: {
+      initMap() {
+        var mapContainer = document.getElementById("book-aladin-map"); // 지도를 표시할 div
+        var mapOption = {
+          center: new kakao.maps.LatLng(37.564343, 126.947613), // 지도의 중심좌표
+          level: 3, // 지도의 확대 레벨
+        };
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+      },
+
+      addKakaoMapScript() {
+        const script = document.createElement("script");
+        script.onload = function() { kakao.maps.load(this.initMap); }
+        script.src = "http://dapi.kakao.com/v2/maps/sdk.js?appkey=86a89344314a38af4882760b5c260ce0";
+        document.head.appendChild(script);
+      }
+    }
   }
 </script>
 
@@ -147,10 +177,6 @@
   @media screen and (max-width:768px){
     .modal-container{
       width: 95%;
-    }
-
-    .modal-header{
-
     }
   }
 </style>
