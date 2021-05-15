@@ -152,6 +152,7 @@
 
   .select{
     margin-top: 10px;
+    margin-bottom: 10px;
     margin-left: auto;
     margin-right: auto;
     padding:2px;
@@ -168,6 +169,7 @@
 
   /* 모바일 환경 */
   @media screen and (max-width: 768px){
+
     .search{
       height: 30px;
       max-width: 100%;
@@ -198,7 +200,6 @@
       border:0;
       border-radius:0;
       border-bottom:1px solid #557174;
-      
       margin:0;
     }
   }

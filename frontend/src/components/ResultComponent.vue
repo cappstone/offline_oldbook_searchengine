@@ -2,9 +2,8 @@
   
   <div v-if="book[0]!=''">
     <div class="book-container" v-if="book[1]=='0'">
-
-      <div class="book-card" v-for="(book, bookey) in book[0].result" v-bind:key="bookey">
-        <table class="book-aladin-info" v-on:click="moreView(bookey)">
+      <div class="book-card" v-for="(book, bookey) in book[0].result" v-bind:key="bookey" v-bind:style="[book.mallCount==0?{'cursor':'default'}:{'cursor':'pointer'}, backShadow]" v-on:mouseover="changeHover(book)">
+        <table class="book-aladin-info" v-on:click="moreView(book.mallCount, bookey)">
           <tr>
             <td rowspan="4" class="book-aladin-img">
               <img v-bind:src="book.imgurl">
@@ -22,7 +21,7 @@
           </tr>
         </table>
 
-        <Modal v-if="showModal==true && showIndex==bookey" v-on:close="showModal=false" v-bind:details="book.mall"></Modal>
+        <Modal v-if="showmodal==true && showindex==bookey" v-on:close="showmodal=false" v-bind:details="book.mall"></Modal>
 
       </div>
 
@@ -56,8 +55,9 @@ export default {
 
     data: function() {
       return {
-        showIndex: '',
-        showModal: false
+        showindex: '',
+        showmodal: false,
+        shadowColour: ''
       }
     },
 
@@ -66,19 +66,37 @@ export default {
     },
 
     methods:{
-      moreView: function(index){
-        this.showIndex=index;
-        this.showModal=true;
+      moreView: function(count,index){
+        if (count!=0) {
+          this.showindex=index;
+          this.showmodal=true;
+        } 
+      },
+      changeHover: function(count){
+        if (count.mallCount == 0){
+          this.shadowColour='rgba(230,99,138,0.8)';
+        }
+        else{
+          this.shadowColour='rgba(99,230,138,0.8)';
+        }
       }
     },
 
     watch: {
       showModal: function() {
-        if(this.showModal==true){
+        if(this.showmodal==true){
           document.documentElement.style.overflow="hidden";
           return;
         }
         document.documentElement.style.overflow="auto";
+      }
+    },
+    
+    computed: {
+      backShadow() {
+        return {
+          '--box-shadow': this.shadowColour
+        }
       }
     }
 }
@@ -95,7 +113,7 @@ export default {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.3);
     border-radius: 12px;
 
-    background-color: white;
+    background-color: #ffffff;
 
     max-width: 35%;
     height: 200px;
@@ -106,7 +124,7 @@ export default {
   }
 
   .book-card:hover {
-    box-shadow: 0 8px 16px 0 rgba(99,230,138,0.6);
+    box-shadow: 0 8px 16px 0 var(--box-shadow);
   }
 
   .book-aladin-info {
@@ -114,8 +132,6 @@ export default {
     width: 100%;
 
     table-layout: fixed;
-
-    cursor: pointer;
   }
 
   .book-aladin-bookname {
@@ -145,7 +161,7 @@ export default {
   }
 
   .book-aladin-desc {
-    font-size: max(1vw,12px);
+    font-size: max(0.9vw,10px);
 
     text-align: left;
     vertical-align: top;
