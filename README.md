@@ -34,3 +34,7 @@ http://sc0nep.iptime.org:7000/search?word=스즈미야하루히의우울&mode=0
 ### 검색모드
 0: 알라딘
 1: yes24
+
+## 5. Crawling 테스트 하기
+1. python backend/test.py
+2. 터미널에 나오는 내용에 따라 진행하기
