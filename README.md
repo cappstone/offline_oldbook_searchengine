@@ -1,6 +1,10 @@
 # offline_oldbook_searchengine
 yes24, 알라딘 오프라인 중고 서점 크롤링 검색엔진
-Backend Spec -> https://github.com/cappstone/offline_oldbook_searchengine/tree/dev/backend
+
+### Backend Spec
+https://github.com/cappstone/offline_oldbook_searchengine/tree/dev/backend
+
+### Frontend Spec
 
 ## 1. 세팅방법
 ### 원스크립트 세팅
