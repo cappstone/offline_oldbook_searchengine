@@ -13,6 +13,8 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@fortawesome/vue-fontawesome": "^2.0.2",
     "core-js": "^3.6.5",
+    "node-sass": "^5.0.0",
+    "sass-loader": "^10.1.1",
     "vue": "^2.6.11"
   },
   "devDependencies": {
@@ -35,6 +37,9 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
+    "globals": {
+      "kakao": false
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     },
