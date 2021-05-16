@@ -3,7 +3,8 @@
 import multiprocessing
 # import module.aladin as Aladin
 from module.aladinV2 import Aladin
-import module.yes24 as Yes24
+from module.yes24V2 import Yes24
+#import module.yes24 as Yes24
 
 
 class Search_Process:
@@ -22,8 +23,10 @@ class Search_Process:
         print(search.result())
 
     def search_yes24(self):
-        search_page = Yes24.Searchpage(self.word)
-        search_page.print_data()
+        # search_page = Yes24.Searchpage(self.word)
+        # search_page.print_data()
+        search = Yes24(self.word)
+        print(search.result())
 
 
 if __name__ == "__main__":
