@@ -1,7 +1,7 @@
 # YES24, 알라딘 오프라인 중고 서점 통합 검색엔진
 
 ### Backend Spec
-* https://github.com/cappstone/offline_oldbook_searchengine/tree/dev/backend
+* https://github.com/cappstone/offline_oldbook_searchengine/tree/main/backend
 
 ### Frontend Spec
 * 추가예정
