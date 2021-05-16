@@ -182,7 +182,7 @@ class Aladin:
                 # 중고 매장 재고 정보를 dict형태의 변수로 저장
                 mall_data: Dict = {
                     "mall_id": i,  # 몇번쨰 중고매장인지
-                    "mallName": mall[0],  # 중고 매장 이름
+                    "mallName": "알라딘-" + mall[0],  # 중고 매장 이름
                     "stockCount": len(result[i]),  # 재고수
                     "stock": result[i]  # 재고 데이터가 담긴 리스트 타입변수
                 }
