@@ -100,7 +100,7 @@
       addKakaoMapScript() {
         const script = document.createElement("script");
         script.onload = function() { kakao.maps.load(this.initMap); }
-        script.src = "http://dapi.kakao.com/v2/maps/sdk.js?appkey=86a89344314a38af4882760b5c260ce0&libraries=services";
+        script.src = "//dapi.kakao.com/v2/maps/sdk.js?appkey=86a89344314a38af4882760b5c260ce0&libraries=services";
         document.head.appendChild(script);
       },
 
