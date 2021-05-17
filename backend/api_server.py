@@ -2,7 +2,7 @@ from flask_restful import Resource, reqparse, Api
 from flask import Flask, make_response
 from flask_cors import CORS
 from module.aladinV2 import Aladin
-from module.yes24V2 as Yes24
+from module.yes24V2 import Yes24
 # import module.aladin as Aladin
 #import module.yes24 as Yes24
 import json
