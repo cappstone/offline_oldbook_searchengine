@@ -41,7 +41,7 @@
             vue.$emit('data-to-upper',[vue.search,vue.searchstore]);
           }).catch(function(error) {
             console.log(error);
-            alert(+(error=="TypeError: Cannot set property 'isLoading' of undefined")?'서버와의 연결이 끊어졌습니다':error);
+            alert((error=="TypeError: Cannot set property 'isLoading' of undefined")?'서버와의 연결이 끊어졌습니다':error);
             vue.isLoading=false; //스피너 끄기
           });
         }

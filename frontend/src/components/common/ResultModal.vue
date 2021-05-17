@@ -27,7 +27,7 @@
 
         <!-- 모달 풋터 -->
         <div class="modal-footer">
-          <span>지점 이름을 누르면 해당 위치로 이동합니다. 마커를 누르면 주소를 볼 수 있습니다.</span>
+          <span>지점 이름을 누르면 해당 위치로 이동합니다.</span>
           <button class="modal-default-button" @click="$emit('close')"><i class="fas fa-times fa-3x"></i></button>
         </div>
       </div>
@@ -72,24 +72,14 @@
 
         var tempmap=this.map;
         var tempwin=this.window;
-        var tempadd=this.address;
         
         for (var i=0; i<this.result.length; i++) {
           this.location.keywordSearch('알라딘 중고서점'+this.result[i].mallName, function(data,status){
             if (status === kakao.maps.services.Status.OK) {
               for (var j=0; j<data.length; j++){
-                var tempdat=data[j];
-                var juso='';
                 var marker = new kakao.maps.Marker({
                   map: tempmap,
-                  position: new kakao.maps.LatLng(tempdat.y, tempdat.x) 
-                });
-                kakao.maps.event.addListener(marker,'click',function(){
-                  tempadd.coord2Address(tempdat.x,tempdat.y, function(result){
-                    juso=result[0].road_address.address_name;
-                    tempwin.setContent('<div style="padding:5px;font-size:12px;">' + juso + '</div>');
-                    tempwin.open(tempmap,marker);
-                  });
+                  position: new kakao.maps.LatLng(data[j].y, data[j].x) 
                 });
               }
             }
@@ -107,6 +97,9 @@
       getLocation(keyword) {
         //console.log(this.map);
         var tempmap=this.map;
+        var tempadd=this.address;
+        var tempwin=this.window;
+
         this.location.keywordSearch('알라딘 중고서점'+keyword, function(data,status){
           //console.log(data);
           if (status === kakao.maps.services.Status.OK) {
@@ -116,11 +109,25 @@
             var bounds = new kakao.maps.LatLngBounds();
 
             for (var i=0; i<data.length; i++) {
+              var marker = new kakao.maps.Marker({
+                map: tempmap,
+                position: new kakao.maps.LatLng(data[i].y,data[i].x)
+              });
+
+              var juso='';
+
+              tempadd.coord2Address(data[i].x,data[i].y, function(result){
+                juso=result[0].road_address.address_name;
+                tempwin.setContent('<div style="padding:5px;font-size:12px;">' + juso + '</div>');
+                tempwin.open(tempmap,marker);
+              });
+
               bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
             }
 
             // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
             tempmap.setBounds(bounds);
+
           }
         });
       }
