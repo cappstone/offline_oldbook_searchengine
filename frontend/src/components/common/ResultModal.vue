@@ -27,7 +27,7 @@
 
         <!-- 모달 풋터 -->
         <div class="modal-footer">
-          <span>지점 이름을 누르면 위치가 나옵니다.</span>
+          <span>지점 이름을 누르면 해당 위치로 이동합니다. 마커를 누르면 주소를 볼 수 있습니다.</span>
           <button class="modal-default-button" @click="$emit('close')"><i class="fas fa-times fa-3x"></i></button>
         </div>
       </div>
@@ -43,7 +43,9 @@
       return{
         map: {},
         location: {},
-        result: this.details
+        result: this.details,
+        address: {},
+        window: {}
       }
     },
 
@@ -65,18 +67,29 @@
         };
         this.map = new kakao.maps.Map(mapContainer, mapOption);
         this.location = new kakao.maps.services.Places();
-        var tempmap=this.map
+        this.address = new kakao.maps.services.Geocoder();
+        this.window = new kakao.maps.InfoWindow({zIndex:1});
+
+        var tempmap=this.map;
+        var tempwin=this.window;
+        var tempadd=this.address;
         
         for (var i=0; i<this.result.length; i++) {
           this.location.keywordSearch('알라딘 중고서점'+this.result[i].mallName, function(data,status){
             if (status === kakao.maps.services.Status.OK) {
               for (var j=0; j<data.length; j++){
+                var tempdat=data[j];
+                var juso='';
                 var marker = new kakao.maps.Marker({
                   map: tempmap,
-                  position: new kakao.maps.LatLng(data[j].y, data[j].x) 
-                  });
+                  position: new kakao.maps.LatLng(tempdat.y, tempdat.x) 
+                });
                 kakao.maps.event.addListener(marker,'click',function(){
-                  console.log(data[j].place_name);
+                  tempadd.coord2Address(tempdat.x,tempdat.y, function(result){
+                    juso=result[0].road_address.address_name;
+                    tempwin.setContent('<div style="padding:5px;font-size:12px;">' + juso + '</div>');
+                    tempwin.open(tempmap,marker);
+                  });
                 });
               }
             }

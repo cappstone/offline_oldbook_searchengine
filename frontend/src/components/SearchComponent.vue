@@ -31,8 +31,8 @@
       },
       getData: function() {
         const vue = this;
-        //vue.searchurl='http://sc0nep.iptime.org:7000/search?word='+String(vue.searchname)+'&mode='+String(vue.searchstore)
-        vue.searchurl='http://localhost:7000/search?word='+String(vue.searchname)+'&mode='+String(vue.searchstore) //서버 맛갔을때 디버그용
+        vue.searchurl='https://bookapi.nendo.space/search?word='+String(vue.searchname)+'&mode='+String(vue.searchstore)
+        //vue.searchurl='http://localhost:7000/search?word='+String(vue.searchname)+'&mode='+String(vue.searchstore) //서버 맛갔을때 디버그용
         if (vue.searchname!='') {
           axios.get(vue.searchurl).then(function(response) {
             //vue.display(response.data); //콘솔창 디버그용
@@ -41,7 +41,7 @@
             vue.$emit('data-to-upper',[vue.search,vue.searchstore]);
           }).catch(function(error) {
             console.log(error);
-            alert('치명적인 오류가 발생했습니다. 다시 시도해 주세요.\n오류명 : '+error);
+            alert(+(error=="TypeError: Cannot set property 'isLoading' of undefined")?'서버와의 연결이 끊어졌습니다':error);
             vue.isLoading=false; //스피너 끄기
           });
         }
