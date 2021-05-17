@@ -16,7 +16,7 @@
 4. npm run serve 하여 vue-cli실행
 5. python api_server.py
 ### 주의사항
-* 위의 세팅방법은 linux계열 및 macOS에서만 가능함
+* 위의 세팅방법은 Debian Linux 계열 및 macOS에서만 가능함
 * api_server.py 들어가서 포트세팅 할 것 (기본: 7000)
 
 ## 2. 실행방법
