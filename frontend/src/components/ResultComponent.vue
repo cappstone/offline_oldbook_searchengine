@@ -6,11 +6,11 @@
         <table class="book-aladin-info" v-on:click="moreView(book.mallCount, bookey)">
           <tr>
             <td rowspan="4" class="book-aladin-img">
-              <img v-bind:src="book[1]=='0'?book.imgurl:book.imgUrl">
+              <img v-bind:src="book.imgUrl">
             </td>
           </tr>
           <tr>
-            <td class="book-aladin-bookname">{{book[1]=='0'?book.bookname:book.bookName}}</td>
+            <td class="book-aladin-bookname">{{book.bookName}}</td>
           </tr>
           <tr>
             <td class="book-aladin-desc">{{book.description}}</td>
