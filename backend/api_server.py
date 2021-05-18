@@ -22,7 +22,7 @@ class Search(Resource):
                 aladin = Aladin(args['word'])
                 result = aladin.result()
             elif args['mode'] == 1:
-                yes24 = Yes24.Search(args['word'])
+                yes24 = Yes24(args['word'])
                 result = yes24.result()
             """
             elif args['mode'] == "common":

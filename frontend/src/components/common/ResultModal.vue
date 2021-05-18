@@ -11,14 +11,27 @@
         <div class="modal-body">
           <div v-for="(result,resultkey) in details" v-bind:key="resultkey">
             <div class="book-aladin-place" v-on:click="getLocation(result.mallName)"><b> {{result.mallName}}</b> - {{result.stockCount}}개</div>
-            <div class="book-aladin-status" v-for="(status,statuskey) in result.stock" v-bind:key="statuskey">
+            <div v-if="malltype=='0'">
+              <div class="book-aladin-status" v-for="(status,statuskey) in result.stock" v-bind:key="statuskey">
+                <table class="book-aladin-stock">
+                  <tr>
+                    <td class="book-aladin-location">위치: {{status.location}}</td>
+                    <td rowspan="5" class="book-aladin-price">{{status.price}}</td>
+                  </tr>
+                  <tr>
+                    <td class="book-aladin-quality">품질: {{status.quality}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div v-else>
               <table class="book-aladin-stock">
                 <tr>
-                  <td class="book-aladin-location">위치: {{status.location}}</td>
-                  <td rowspan="5" class="book-aladin-price">{{status.price}}</td>
+                  <td class="book-aladin-location">위치: {{result.location}}</td>
+                  <td rowspan="5" class="book-aladin-price">{{result.price}}</td>
                 </tr>
                 <tr>
-                  <td class="book-aladin-quality">품질: {{status.quality}}</td>
+                  <td class="book-aladin-quality">재고: {{result.stockCount}}개</td>
                 </tr>
               </table>
             </div>
@@ -37,7 +50,7 @@
 
 <script>
   export default {
-    props:['details'],
+    props:['details', 'malltype'],
 
     data: function(){
       return{
@@ -74,7 +87,7 @@
         var tempwin=this.window;
         
         for (var i=0; i<this.result.length; i++) {
-          this.location.keywordSearch('알라딘 중고서점'+this.result[i].mallName, function(data,status){
+          this.location.keywordSearch(this.result[i].mallName, function(data,status){
             if (status === kakao.maps.services.Status.OK) {
               for (var j=0; j<data.length; j++){
                 var marker = new kakao.maps.Marker({
@@ -100,7 +113,7 @@
         var tempadd=this.address;
         var tempwin=this.window;
 
-        this.location.keywordSearch('알라딘 중고서점'+keyword, function(data,status){
+        this.location.keywordSearch(keyword, function(data,status){
           //console.log(data);
           if (status === kakao.maps.services.Status.OK) {
 
