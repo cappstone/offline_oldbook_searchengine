@@ -100,7 +100,7 @@ class Yes24:
 
                     # 매장내 재고 추가 하기
                     mall_info: Dict = {}
-                    mall_info['id'] = len(result[index]['mall'])
+                    mall_info['mall_id'] = len(result[index]['mall'])
                     mall_info['mallName'] = "YES24 " + item['mall']
                     mall_info['price'] = "None" if item['price'] == "None" else item['price'][:-1]
                     mall_info['location'] = "None" if item['location'] == "None" else item['location']

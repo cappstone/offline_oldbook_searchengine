@@ -64,7 +64,7 @@ class Aladin:
             # 검색결과에 대해서 dict타입의 형태로 작성하기
             Aladin.search_result = {
                 "keyword": keyword,
-                "search_total": len(result),
+                "searchTotal": len(result),
                 "result": result
             }
 
@@ -108,9 +108,9 @@ class Aladin:
         # 한개의 아이템에 대한 dict형태
         item: Dict = {
             "id": "",  # index
-            "bookname": title,  # 책이름
+            "bookName": title,  # 책이름
             "description": description,  # 책설명
-            "imgurl": imgurl,  # 책 이미지 주소
+            "imgUrl": imgurl,  # 책 이미지 주소
             "mallCount": len(list(instock_shop.keys())),  # 재고가 있는 매장 개수
             "mall": Aladin.Item(instock_shop.items()).stock_info()  # 재고있는 매장의 목록
             # "mall": list(instock_shop.keys()),  # 재고있는 매장의 목록
