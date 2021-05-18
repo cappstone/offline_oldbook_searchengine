@@ -31,8 +31,8 @@
       },
       getData: function() {
         const vue = this;
-        //vue.searchurl='https://bookapi.nendo.space/search?word='+String(vue.searchname)+'&mode='+String(vue.searchstore)
-        vue.searchurl='http://localhost:7000/search?word='+String(vue.searchname)+'&mode='+String(vue.searchstore) //서버 맛갔을때 디버그용
+        vue.searchurl='https://bookapi.nendo.space/search?word='+String(vue.searchname)+'&mode='+String(vue.searchstore)
+        //vue.searchurl='http://localhost:7000/search?word='+String(vue.searchname)+'&mode='+String(vue.searchstore) //서버 맛갔을때 디버그용
         if (vue.searchname!='') {
           axios.get(vue.searchurl).then(function(response) {
             //vue.display(response.data); //콘솔창 디버그용
