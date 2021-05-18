@@ -1,16 +1,16 @@
 <template>
   
   <div v-if="book[0]!=''">
-    <div class="book-container" v-if="book[1]=='0'">
+    <div class="book-container">
       <div class="book-card" v-for="(book, bookey) in book[0].result" v-bind:key="bookey" v-bind:style="[book.mallCount==0?{'cursor':'default'}:{'cursor':'pointer'}, backShadow]" v-on:mouseover="changeHover(book)">
         <table class="book-aladin-info" v-on:click="moreView(book.mallCount, bookey)">
           <tr>
             <td rowspan="4" class="book-aladin-img">
-              <img v-bind:src="book.imgurl">
+              <img v-bind:src="book[1]=='0'?book.imgurl:book.imgUrl">
             </td>
           </tr>
           <tr>
-            <td class="book-aladin-bookname">{{book.bookname}}</td>
+            <td class="book-aladin-bookname">{{book[1]=='0'?book.bookname:book.bookName}}</td>
           </tr>
           <tr>
             <td class="book-aladin-desc">{{book.description}}</td>
@@ -21,12 +21,12 @@
           </tr>
         </table>
 
-        <Modal v-if="showmodal==true && showindex==bookey" v-on:close="showmodal=false" v-bind:details="book.mall"></Modal>
+        <Modal v-if="showmodal==true && showindex==bookey" v-on:close="showmodal=false" v-bind:details="book.mall" v-bind:malltype="book[1]"></Modal>
 
       </div>
 
     </div>
-
+    <!--
     <div id="yes" v-else>
       <ul class="book-card" v-for="key in book[0]" v-bind:key="key" style="margin-bottom:1vw; padding:25px">
         <li style="list-style-type: none">
@@ -45,6 +45,7 @@
         </li>
       </ul>
     </div>
+    -->
   </div>
 </template>
 

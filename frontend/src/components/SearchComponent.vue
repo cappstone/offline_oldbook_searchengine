@@ -36,12 +36,13 @@
         if (vue.searchname!='') {
           axios.get(vue.searchurl).then(function(response) {
             //vue.display(response.data); //콘솔창 디버그용
+            //console.log(response);
             vue.search=response.data;
             if (vue.search.result==''){alert("찾는 데이타가 없습니다")}
             vue.$emit('data-to-upper',[vue.search,vue.searchstore]);
           }).catch(function(error) {
-            console.log(error);
-            alert((error=="TypeError: Cannot set property 'isLoading' of undefined")?'서버와의 연결이 끊어졌습니다':error);
+            //console.log(error);
+            alert('시스템에 오류가 일어났습니다.\n오류명: '+error);
             vue.isLoading=false; //스피너 끄기
           });
         }
