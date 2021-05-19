@@ -6,8 +6,8 @@
         <button v-on:click="getData"><i class="fas fa-search search-icon"></i></button>
       </div>
       <div class="select">
-        <input type="radio" id="aladin" value="0" v-model="searchstore"><label for="aladin">Aladin</label>
-        <input type="radio" id="yes" value="1" v-model="searchstore"><label for="yes">Yes24</label>
+        <input type="radio" id="aladin" value="0" v-model="sortcriteria"><label for="aladin">제목순</label>
+        <input type="radio" id="yes" value="1" v-model="sortcriteria"><label for="yes">점포순</label>
       </div>
     </div>
     <Spinner v-bind:isVisible="isLoading"></Spinner>
@@ -21,7 +21,7 @@
   export default {
     components:{Spinner},
 
-    data:function(){return {isLoading:false,axiosInterceptor:null,searchname:'',searchstore:'0',searchurl:'', search:''}},
+    data:function(){return {isLoading:false,axiosInterceptor:null,searchname:'',sortcriteria:'0',searchurl:'', search:'', search2:''}},
 
     methods: {
       checkEntered: function() {
@@ -31,15 +31,55 @@
       },
       getData: function() {
         const vue = this;
-        vue.searchurl='https://bookapi.nendo.space/search?word='+String(vue.searchname)+'&mode='+String(vue.searchstore)
+        vue.searchurl='https://bookapi.nendo.space/search?word='+String(vue.searchname)
         //vue.searchurl='http://localhost:7000/search?word='+String(vue.searchname)+'&mode='+String(vue.searchstore) //서버 맛갔을때 디버그용
         if (vue.searchname!='') {
-          axios.get(vue.searchurl).then(function(response) {
+          //알라딘 크롤링
+          axios.get(vue.searchurl+'&mode=0').then(function(response) {
             //vue.display(response.data); //콘솔창 디버그용
             //console.log(response);
             vue.search=response.data;
+            
+            //예스이십사 크롤링
+            axios.get(vue.searchurl+'&mode=1').then(function(response) {
+              vue.search2=response.data;
+              console.log(vue.search2.result);
+              
+              //알라딘 예스24 합치는 함수
+              vue.search.searchTotal+=vue.search2.searchTotal;
+              var i,j,k;
+              for (i=0;i<vue.search.result.length;i++){
+                for (j=0;j<vue.search2.result.length;j++){
+                  if (vue.search.result[i].bookName==vue.search2.result[j].bookName){
+                    vue.search.result[i].mallCount+=vue.search2.result[j].mallCount;
+                    for (k=0;k<vue.search2.result[j].mall.length;k++){
+                      vue.search.result[i].mall.push(vue.search2.result[j].mall[k]);
+                    }
+                    vue.search2.result.splice(j,j);
+                    vue.search.searchTotal-=1;
+                    vue.search2.searchTotal-=1;
+                  }
+                }
+              }
+              for (i=0;i<vue.search2.result.length;i++){
+                vue.search.result.push(vue.search2.result[i]);
+              }
+              //기준에 맞춰 정렬하기
+              vue.search.result.sort(function(a,b){
+                if (vue.sortcriteria=='0'){
+                  if (a.bookName<b.bookName) return -1;
+                  if (a.bookName>b.bookName) return 1;
+                  if (a.bookName===b.bookName) return 0;
+                }
+                else if (vue.sortcriteria=='1'){
+                  if (a.mallCount<b.mallCount) return 1;
+                  if (a.mallCount>b.mallCount) return -1;
+                  if (a.mallCount===b.mallCount) return 0;
+                }
+              });
+            });
             if (vue.search.result==''){alert("찾는 데이타가 없습니다")}
-            vue.$emit('data-to-upper',[vue.search,vue.searchstore]);
+            vue.$emit('data-to-upper',vue.search);
           }).catch(function(error) {
             //console.log(error);
             alert('시스템에 오류가 일어났습니다.\n오류명: '+error);
