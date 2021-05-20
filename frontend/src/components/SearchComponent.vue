@@ -31,19 +31,13 @@
       },
       getData: function() {
         const vue = this;
-        vue.searchurl='http://bookapi.nendo.space/search?word='+String(vue.searchname)
+        vue.searchurl='https://bookapi.nendo.space/search?word='+String(vue.searchname)
         //vue.searchurl='http://localhost:7000/search?word='+String(vue.searchname)+'&mode='+String(vue.searchstore) //서버 맛갔을때 디버그용
         if (vue.searchname!='') {
           //알라딘 크롤링
-          axios.get(vue.searchurl+'&mode=0').then(function(response) {
-            //vue.display(response.data); //콘솔창 디버그용
-            //console.log(response);
+          axios.all([axios.get(vue.searchurl+'&mode=0'),axios.get(vue.searchurl+'&mode=1')]).then(axios.spread(function(response,response2){
             vue.search=response.data;
-            
-            //예스이십사 크롤링
-            axios.get(vue.searchurl+'&mode=1').then(function(response) {
-              vue.search2=response.data;
-              console.log(vue.search2.result);
+            vue.search2=response2.data;
               
               //알라딘 예스24 합치는 함수
               vue.search.searchTotal+=vue.search2.searchTotal;
@@ -77,13 +71,12 @@
                   if (a.mallCount===b.mallCount) return 0;
                 }
               });
-            });
             if (vue.search.result==''){alert("찾는 데이타가 없습니다")}
             vue.$emit('data-to-upper',vue.search);
-          }).catch(function(error) {
+          })).catch(function(error) {
             //console.log(error);
             alert('시스템에 오류가 일어났습니다.\n오류명: '+error);
-            vue.isLoading=false; //스피너 끄기
+            vue.isLoading=false; //스피너 끄기;
           });
         }
         else { //검색어 안입력했을때
