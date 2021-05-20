@@ -11,7 +11,7 @@
         <div class="modal-body">
           <div v-for="(result,resultkey) in details" v-bind:key="resultkey">
             <div class="book-aladin-place" v-on:click="getLocation(result.mallName)"><b> {{result.mallName}}</b> - {{result.stockCount}}개</div>
-            <div v-if="malltype=='0'">
+            <div v-if="result.stock">
               <div class="book-aladin-status" v-for="(status,statuskey) in result.stock" v-bind:key="statuskey">
                 <table class="book-aladin-stock">
                   <tr>
@@ -50,7 +50,7 @@
 
 <script>
   export default {
-    props:['details', 'malltype'],
+    props:['details'],
 
     data: function(){
       return{

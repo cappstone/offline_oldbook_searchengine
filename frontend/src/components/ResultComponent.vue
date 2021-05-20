@@ -1,27 +1,27 @@
 <template>
   
-  <div v-if="book[0]!=''">
+  <div v-if="book!=''">
     <div class="book-container">
-      <div class="book-card" v-for="(book, bookey) in book[0].result" v-bind:key="bookey" v-bind:style="[book.mallCount==0?{'cursor':'default'}:{'cursor':'pointer'}, backShadow]" v-on:mouseover="changeHover(book)">
-        <table class="book-aladin-info" v-on:click="moreView(book.mallCount, bookey)">
+      <div class="book-card" v-for="(result, resultkey) in book.result" v-bind:key="resultkey" v-bind:style="[book.mallCount==0?{'cursor':'default'}:{'cursor':'pointer'}, backShadow]" v-on:mouseover="changeHover(book)">
+        <table class="book-aladin-info" v-on:click="moreView(result.mallCount, resultkey)">
           <tr>
             <td rowspan="4" class="book-aladin-img">
-              <img v-bind:src="book.imgUrl">
+              <img v-bind:src="result.imgUrl">
             </td>
           </tr>
           <tr>
-            <td class="book-aladin-bookname">{{book.bookName}}</td>
+            <td class="book-aladin-bookname">{{result.bookName}}</td>
           </tr>
           <tr>
-            <td class="book-aladin-desc">{{book.description}}</td>
+            <td class="book-aladin-desc">{{result.description}}</td>
           </tr>
           <tr>
-            <td class="book-aladin-store-is" v-if="book.mallCount!=0"><b>{{book.mallCount}}개의 지점에 책이 존재합니다.</b></td>
+            <td class="book-aladin-store-is" v-if="result.mallCount!=0"><b>{{result.mallCount}}개의 지점에 책이 존재합니다.</b></td>
             <td class="book-aladin-store-none" v-else><b>현재 모든 지점에 책이 없습니다.</b></td>
           </tr>
         </table>
 
-        <Modal v-if="showmodal==true && showindex==bookey" v-on:close="showmodal=false" v-bind:details="book.mall" v-bind:malltype="book[1]"></Modal>
+        <Modal v-if="showmodal==true && showindex==resultkey" v-on:close="showmodal=false" v-bind:details="result.mall"></Modal>
 
       </div>
 
