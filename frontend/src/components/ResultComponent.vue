@@ -117,7 +117,7 @@ export default {
     background-color: #ffffff;
 
     max-width: 35%;
-    height: 200px;
+    min-height: 200px;
 
     transition: all 0.3s ease;
 
@@ -129,7 +129,8 @@ export default {
   }
 
   .book-aladin-info {
-    padding: 10px;
+    padding: 5px;
+    padding-top: 10px;
     width: 100%;
 
     table-layout: fixed;
@@ -172,18 +173,18 @@ export default {
 
   .book-aladin-store-is {
     text-align: left;
-    font-size: max(1vw,14px);
+    font-size: max(1vw,13px);
   }
   .book-aladin-store-none {
     text-align: left;
-    font-size: max(1vw,14px);
+    font-size: max(1vw,13px);
     color: #c64756;
   }
 
 @media screen and (max-width:768px) {
   .book-card{
     max-width:95%;
-    height: auto;
+    min-height: auto;
     border-radius:0;
     border: 1px solid #557174;
     box-shadow:none;

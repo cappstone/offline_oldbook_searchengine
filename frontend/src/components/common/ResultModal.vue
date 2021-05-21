@@ -10,7 +10,7 @@
         <!-- 모달 보디 -->
         <div class="modal-body">
           <div v-for="(result,resultkey) in details" v-bind:key="resultkey">
-            <div class="book-aladin-place" v-on:click="getLocation(result.mallName)"><b> {{result.mallName}}</b> - {{result.stockCount}}개</div>
+            <div class="book-aladin-place" v-on:click="getLocation(result.mallName,result.mall_id)"><b> {{result.mallName}}</b> - {{result.stockCount}}개</div>
             <div v-if="result.stock">
               <div class="book-aladin-status" v-for="(status,statuskey) in result.stock" v-bind:key="statuskey">
                 <table class="book-aladin-stock">
@@ -28,7 +28,7 @@
               <table class="book-aladin-stock">
                 <tr>
                   <td class="book-aladin-location">위치: {{result.location}}</td>
-                  <td rowspan="5" class="book-aladin-price">{{result.price}}</td>
+                  <td rowspan="5" class="book-aladin-price">{{result.price}}원</td>
                 </tr>
                 <tr>
                   <td class="book-aladin-quality">재고: {{result.stockCount}}개</td>
@@ -56,9 +56,10 @@
       return{
         map: {},
         location: {},
-        result: this.details,
+        mall: this.details,
         address: {},
-        window: {}
+        window: {},
+        markerlist: []
       }
     },
 
@@ -84,20 +85,23 @@
         this.window = new kakao.maps.InfoWindow({zIndex:1});
 
         var tempmap=this.map;
-        var tempwin=this.window;
+        var tempmarker=this.markerlist;
         
-        for (var i=0; i<this.result.length; i++) {
-          this.location.keywordSearch(this.result[i].mallName, function(data,status){
+        for (var i=0; i<this.mall.length; i++) {
+          this.location.keywordSearch(this.mall[i].mallName, function(data,status){
             if (status === kakao.maps.services.Status.OK) {
               for (var j=0; j<data.length; j++){
-                var marker = new kakao.maps.Marker({
+                var marker= new kakao.maps.Marker({
                   map: tempmap,
-                  position: new kakao.maps.LatLng(data[j].y, data[j].x) 
+                  position: new kakao.maps.LatLng(data[j].y,data[j].x)
                 });
+                tempmarker.push(marker);
               }
             }
           });
+          this.markerlist=tempmarker;
         }
+        //this.marker=tempmarker;
       },
 
       addKakaoMapScript() {
@@ -107,11 +111,11 @@
         document.head.appendChild(script);
       },
 
-      getLocation(keyword) {
-        //console.log(this.map);
+      getLocation(keyword,index) {
         var tempmap=this.map;
         var tempadd=this.address;
         var tempwin=this.window;
+        var tempmarker=this.markerlist[index];
 
         this.location.keywordSearch(keyword, function(data,status){
           //console.log(data);
@@ -122,20 +126,17 @@
             var bounds = new kakao.maps.LatLngBounds();
 
             for (var i=0; i<data.length; i++) {
-              var marker = new kakao.maps.Marker({
-                map: tempmap,
-                position: new kakao.maps.LatLng(data[i].y,data[i].x)
-              });
-
               var juso='';
+              var cor=[data[i].x,data[i].y]
 
-              tempadd.coord2Address(data[i].x,data[i].y, function(result){
+              tempadd.coord2Address(cor[0],cor[1], function(result){
                 juso=result[0].road_address.address_name;
                 tempwin.setContent('<div style="padding:5px;font-size:12px;">' + juso + '</div>');
-                tempwin.open(tempmap,marker);
+                tempmarker.setPosition(new kakao.maps.LatLng(cor[1],cor[0]));
+                tempwin.open(tempmap,tempmarker);
               });
 
-              bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+              bounds.extend(new kakao.maps.LatLng(cor[1], cor[0]));
             }
 
             // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다

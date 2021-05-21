@@ -16,6 +16,7 @@
 
 <script>
   import axios from 'axios'
+  import https from 'https'
   import Spinner from './common/Spinner.vue'
 
   export default {
@@ -31,33 +32,42 @@
       },
       getData: function() {
         const vue = this;
-        vue.searchurl='https://bookapi.nendo.space/search?word='+String(vue.searchname)
-        //vue.searchurl='http://localhost:7000/search?word='+String(vue.searchname)+'&mode='+String(vue.searchstore) //서버 맛갔을때 디버그용
+        vue.searchurl='http://bookapi.nendo.space/search?word='+String(vue.searchname)
+        //vue.searchurl='http://172.30.1.7:23700/search?word='+String(vue.searchname); //공유기 서버
+        //vue.searchurl='http://localhost:7000/search?word='+String(vue.searchname) //서버 맛갔을때 디버그용
         if (vue.searchname!='') {
-          //알라딘 크롤링
-          axios.all([axios.get(vue.searchurl+'&mode=0'),axios.get(vue.searchurl+'&mode=1')]).then(axios.spread(function(response,response2){
-            vue.search=response.data;
-            vue.search2=response2.data;
-              
+          //크롤링
+          //axios.all([axios(vue.searchurl+'&mode=0'),axios(vue.searchurl+'&mode=1')]).then(axios.spread(function(response,response2){
+          axios.get(vue.searchurl+"&mode=1",{timeout:60000}).then(function(response2){
+            axios.get(vue.searchurl+"&mode=0",{timeout:60000}).then(function(response){
+              vue.search=response.data;
+              vue.search2=response2.data;
+              console.log(vue.search,vue.search2);
               //알라딘 예스24 합치는 함수
-              vue.search.searchTotal+=vue.search2.searchTotal;
-              var i,j,k;
-              for (i=0;i<vue.search.result.length;i++){
-                for (j=0;j<vue.search2.result.length;j++){
-                  if (vue.search.result[i].bookName==vue.search2.result[j].bookName){
-                    vue.search.result[i].mallCount+=vue.search2.result[j].mallCount;
-                    for (k=0;k<vue.search2.result[j].mall.length;k++){
-                      vue.search.result[i].mall.push(vue.search2.result[j].mall[k]);
+              if (vue.search.error){
+                vue.search=vue.search2;
+              }
+              else{
+                vue.search.searchTotal+=vue.search2.searchTotal;
+                var i,j,k;
+                for (i=0;i<vue.search.result.length;i++){
+                  for (j=0;j<vue.search2.result.length;j++){
+                    if (vue.search.result[i].bookName==vue.search2.result[j].bookName){
+                      vue.search.result[i].mallCount+=vue.search2.result[j].mallCount;
+                      for (k=0;k<vue.search2.result[j].mall.length;k++){
+                        vue.search.result[i].mall.push(vue.search2.result[j].mall[k]);
+                      }
+                      vue.search2.result.splice(j,j);
+                      vue.search.searchTotal-=1;
+                      vue.search2.searchTotal-=1;
                     }
-                    vue.search2.result.splice(j,j);
-                    vue.search.searchTotal-=1;
-                    vue.search2.searchTotal-=1;
                   }
                 }
+                for (i=0;i<vue.search2.result.length;i++){
+                  vue.search.result.push(vue.search2.result[i]);
+                }
               }
-              for (i=0;i<vue.search2.result.length;i++){
-                vue.search.result.push(vue.search2.result[i]);
-              }
+
               //기준에 맞춰 정렬하기
               vue.search.result.sort(function(a,b){
                 if (vue.sortcriteria=='0'){
@@ -71,11 +81,23 @@
                   if (a.mallCount===b.mallCount) return 0;
                 }
               });
-            if (vue.search.result==''){alert("찾는 데이타가 없습니다")}
-            vue.$emit('data-to-upper',vue.search);
-          })).catch(function(error) {
+
+              // mall_id 초기화
+              console.log(vue.search.result.length);
+              for (i=0;i<vue.search.result.length;i++){
+                console.log(vue.search.result[i].mall.length);
+                for (j=0;j<vue.search.result[i].mall.length;j++){
+                  vue.search.result[i].mall[j].mall_id=j;
+                }
+              }
+
+              if (vue.search.result=='' || vue.search.error){alert("찾는 데이타가 없습니다")}
+              vue.$emit('data-to-upper',vue.search);
+              vue.search='',vue.search2='' //초기화
+            });
+          }).catch(function(error) {
             //console.log(error);
-            alert('시스템에 오류가 일어났습니다.\n오류명: '+error);
+            alert('서버와 연결 할 수 없습니다.\n오류명: '+error);
             vue.isLoading=false; //스피너 끄기;
           });
         }
@@ -98,7 +120,7 @@
         }, function(error){
           this.isLoading=false;
           return Promise.reject(error);
-        });
+        })
       },
       //인터셉터 지워야할시
       disableInterceptor: function() {
@@ -197,7 +219,7 @@
     border-radius: 20px;
     color: #ffffff;
 
-    font-size: 1vw;
+    font-size: max(10px,1vw);
     text-align:center;
   }
 
