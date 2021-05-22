@@ -81,7 +81,7 @@
         var mapContainer = document.getElementById("book-aladin-map"); // 지도를 표시할 div
         var mapOption = {
           center: new kakao.maps.LatLng(35.77114136986587, 127.84584124824799), // 지도의 중심좌표
-          level: 13, // 지도의 확대 레벨
+          level: document.documentElement.clientWidth>768?13:15, // 지도의 확대 레벨
         };
         this.map = new kakao.maps.Map(mapContainer, mapOption);
         this.location = new kakao.maps.services.Places();
