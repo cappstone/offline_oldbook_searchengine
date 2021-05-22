@@ -21,7 +21,7 @@
           </tr>
         </table>
 
-        <Modal v-if="showmodal==true && showindex==resultkey" v-on:close="showmodal=false" v-bind:details="result.mall"></Modal>
+        <Modal v-if="showmodal==true && showindex==resultkey" v-on:close="showmodal=false" v-bind:details="result"></Modal>
 
       </div>
 
@@ -84,7 +84,7 @@ export default {
     },
 
     watch: {
-      showModal: function() {
+      showmodal: function() {
         if(this.showmodal==true){
           document.documentElement.style.overflow="hidden";
           return;

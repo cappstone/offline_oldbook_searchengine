@@ -4,13 +4,17 @@
       <div class="modal-window">
         <!-- 모달 헤더 -->
         <div class="modal-header">
-          <div id="book-aladin-map"></div>
+          <div style="color: #8db596; font-size: max(1.3vw,18px)">{{details.bookName}}</div>
+          <div>{{details.description}}</div>
         </div>
 
         <!-- 모달 보디 -->
+        <div>
+          <div id="book-aladin-map"></div>
+        </div>
         <div class="modal-body">
-          <div v-for="(result,resultkey) in details" v-bind:key="resultkey">
-            <div class="book-aladin-place" v-on:click="getLocation(result.mallName,result.mall_id)"><b> {{result.mallName}}</b> - {{result.stockCount}}개</div>
+          <div class="body-container" v-for="(result,resultkey) in details.mall" v-bind:key="resultkey" v-on:click="getLocation(result.mallName,result.mall_id)">
+            <div class="book-aladin-place"><b> {{result.mallName}}</b> - {{result.stockCount}}개</div>
             <div v-if="result.stock">
               <div class="book-aladin-status" v-for="(status,statuskey) in result.stock" v-bind:key="statuskey">
                 <table class="book-aladin-stock">
@@ -56,7 +60,7 @@
       return{
         map: {},
         location: {},
-        mall: this.details,
+        mall: this.details.mall,
         address: {},
         window: {},
         markerlist: []
@@ -116,7 +120,7 @@
         var tempadd=this.address;
         var tempwin=this.window;
         var tempmarker=this.markerlist[index];
-
+        
         this.location.keywordSearch(keyword=="YES24 수영점F1963"?"YES24 수영점":keyword, function(data,status){
           //console.log(data);
           if (status === kakao.maps.services.Status.OK) {
@@ -131,7 +135,7 @@
 
               tempadd.coord2Address(cor[0],cor[1], function(result){
                 juso=result[0].road_address.address_name;
-                tempwin.setContent('<div style="padding:5px;font-size:12px;">' + juso + '</div>');
+                tempwin.setContent('<div style="padding:5px;font-size:12px;color:#8db596">' + juso + '</div>');
                 tempmarker.setPosition(new kakao.maps.LatLng(cor[1],cor[0]));
                 tempwin.open(tempmap,tempmarker);
               });
@@ -179,21 +183,23 @@
   }
 
   .modal-header {
-    color: #8db596;
-    font-size:max(1.3vw,18px);
-    font-weight:800;
-    text-align:center;
+    font-size:max(1vw,12px);
+    font-weight: 800;
+    margin: 10px;
   }
 
   .modal-body {
     height: 60vh;
     margin: 0;
+    padding-left: 10px;
+    padding-right: 10px;
     text-align: left;
     overflow-y: auto;
   }
   
-  .book-aladin-place {
+  .body-container:hover {
     cursor: pointer;
+    color: #8db596;
   }
 
   .modal-default-button {
@@ -266,6 +272,7 @@
     }
 
     .modal-body {
+      margin-top: 10px;
       height: 30vh;
     }
     
