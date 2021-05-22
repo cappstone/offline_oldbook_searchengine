@@ -100,7 +100,7 @@ class Yes24:
 
                     # 매장내 재고 추가 하기
                     mall_info: Dict = {}
-                    mall_info['id'] = len(result[index]['mall'])
+                    mall_info['mall_id'] = len(result[index]['mall'])
                     mall_info['mallName'] = "YES24 " + item['mall']
                     mall_info['price'] = "None" if item['price'] == "None" else item['price'][:-1]
                     mall_info['location'] = "None" if item['location'] == "None" else item['location']
@@ -146,9 +146,10 @@ class Yes24:
                 # 설명부분 text들 싹다 가져와서 합쳐버리기 - description 크롤링
                 tag_p: str = j.find("p", class_="storeG_pubGrp")
                 tag_span: List = tag_p.find_all("span")
-                description: str = "| "
+                description: str = ""
                 for k in tag_span:
-                    description += k.text + " |"
+                    description += k.text + " | "
+                description = description[:-2].strip()
 
                 # 이미지주소 크롤링
                 tag_em: str = j.find("em", class_="img_bdr")

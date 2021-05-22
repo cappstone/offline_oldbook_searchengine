@@ -60,7 +60,7 @@ body {
   border: 3px solid #557174;
   border-radius: 12px;
   text-align: center;
-  font-size: 1.3vw;
+  font-size: max(1.1vw,13px);
   font-weight: 800;
   margin-left: auto;
   margin-right: auto;

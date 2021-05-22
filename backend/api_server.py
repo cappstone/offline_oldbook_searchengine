@@ -1,9 +1,10 @@
 from flask_restful import Resource, reqparse, Api
 from flask import Flask, make_response
 from flask_cors import CORS
-import module.yes24 as Yes24
 from module.aladinV2 import Aladin
+from module.yes24V2 import Yes24
 # import module.aladin as Aladin
+#import module.yes24 as Yes24
 import json
 
 
@@ -21,8 +22,8 @@ class Search(Resource):
                 aladin = Aladin(args['word'])
                 result = aladin.result()
             elif args['mode'] == 1:
-                yes24 = Yes24.Searchpage(args['word'])
-                result = yes24.return_data()
+                yes24 = Yes24(args['word'])
+                result = yes24.result()
             """
             elif args['mode'] == "common":
             """

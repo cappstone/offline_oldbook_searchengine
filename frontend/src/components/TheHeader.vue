@@ -1,6 +1,6 @@
 <template>
   <header v-on:click="refresh()">
-    <h1>중고책 검색시스템</h1>
+    <h1><img src="logo.png"></h1>
   </header>
 </template>
 

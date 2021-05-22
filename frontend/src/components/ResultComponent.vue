@@ -1,32 +1,32 @@
 <template>
   
-  <div v-if="book[0]!=''">
-    <div class="book-container" v-if="book[1]=='0'">
-      <div class="book-card" v-for="(book, bookey) in book[0].result" v-bind:key="bookey" v-bind:style="[book.mallCount==0?{'cursor':'default'}:{'cursor':'pointer'}, backShadow]" v-on:mouseover="changeHover(book)">
-        <table class="book-aladin-info" v-on:click="moreView(book.mallCount, bookey)">
+  <div v-if="book!=''">
+    <div class="book-container">
+      <div class="book-card" v-for="(result, resultkey) in book.result" v-bind:key="resultkey" v-bind:style="[book.mallCount==0?{'cursor':'default'}:{'cursor':'pointer'}, backShadow]" v-on:mouseover="changeHover(book)">
+        <table class="book-aladin-info" v-on:click="moreView(result.mallCount, resultkey)">
           <tr>
             <td rowspan="4" class="book-aladin-img">
-              <img v-bind:src="book.imgurl">
+              <img v-bind:src="result.imgUrl">
             </td>
           </tr>
           <tr>
-            <td class="book-aladin-bookname">{{book.bookname}}</td>
+            <td class="book-aladin-bookname">{{result.bookName}}</td>
           </tr>
           <tr>
-            <td class="book-aladin-desc">{{book.description}}</td>
+            <td class="book-aladin-desc">{{result.description}}</td>
           </tr>
           <tr>
-            <td class="book-aladin-store-is" v-if="book.mallCount!=0"><b>{{book.mallCount}}개의 지점에 책이 존재합니다.</b></td>
+            <td class="book-aladin-store-is" v-if="result.mallCount!=0"><b>{{result.mallCount}}개의 지점에 책이 존재합니다.</b></td>
             <td class="book-aladin-store-none" v-else><b>현재 모든 지점에 책이 없습니다.</b></td>
           </tr>
         </table>
 
-        <Modal v-if="showmodal==true && showindex==bookey" v-on:close="showmodal=false" v-bind:details="book.mall"></Modal>
+        <Modal v-if="showmodal==true && showindex==resultkey" v-on:close="showmodal=false" v-bind:details="result"></Modal>
 
       </div>
 
     </div>
-
+    <!--
     <div id="yes" v-else>
       <ul class="book-card" v-for="key in book[0]" v-bind:key="key" style="margin-bottom:1vw; padding:25px">
         <li style="list-style-type: none">
@@ -45,6 +45,7 @@
         </li>
       </ul>
     </div>
+    -->
   </div>
 </template>
 
@@ -83,7 +84,7 @@ export default {
     },
 
     watch: {
-      showModal: function() {
+      showmodal: function() {
         if(this.showmodal==true){
           document.documentElement.style.overflow="hidden";
           return;
@@ -116,7 +117,7 @@ export default {
     background-color: #ffffff;
 
     max-width: 35%;
-    height: 200px;
+    min-height: 200px;
 
     transition: all 0.3s ease;
 
@@ -128,7 +129,8 @@ export default {
   }
 
   .book-aladin-info {
-    padding: 10px;
+    padding: 5px;
+    padding-top: 10px;
     width: 100%;
 
     table-layout: fixed;
@@ -171,18 +173,18 @@ export default {
 
   .book-aladin-store-is {
     text-align: left;
-    font-size: max(1vw,14px);
+    font-size: max(1vw,13px);
   }
   .book-aladin-store-none {
     text-align: left;
-    font-size: max(1vw,14px);
+    font-size: max(1vw,13px);
     color: #c64756;
   }
 
 @media screen and (max-width:768px) {
   .book-card{
     max-width:95%;
-    height: auto;
+    min-height: auto;
     border-radius:0;
     border: 1px solid #557174;
     box-shadow:none;
