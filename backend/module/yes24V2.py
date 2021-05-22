@@ -146,9 +146,10 @@ class Yes24:
                 # 설명부분 text들 싹다 가져와서 합쳐버리기 - description 크롤링
                 tag_p: str = j.find("p", class_="storeG_pubGrp")
                 tag_span: List = tag_p.find_all("span")
-                description: str = "| "
+                description: str = ""
                 for k in tag_span:
-                    description += k.text + " |"
+                    description += k.text + " | "
+                description = description[:-2].strip()
 
                 # 이미지주소 크롤링
                 tag_em: str = j.find("em", class_="img_bdr")
