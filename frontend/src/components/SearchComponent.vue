@@ -6,8 +6,9 @@
         <button v-on:click="getData"><i class="fas fa-search search-icon"></i></button>
       </div>
       <div class="select">
-        <input type="radio" id="aladin" value="0" v-model="sortcriteria"><label for="aladin">제목순</label>
-        <input type="radio" id="yes" value="1" v-model="sortcriteria"><label for="yes">점포순</label>
+        <input type="radio" id="aladin" value="0" v-model="sortcriteria"><label for="aladin">기본값(정확도순)</label>
+        <input type="radio" id="aladin" value="1" v-model="sortcriteria"><label for="aladin">제목순</label>
+        <input type="radio" id="yes" value="2" v-model="sortcriteria"><label for="yes">점포순</label>
       </div>
     </div>
     <Spinner v-bind:isVisible="isLoading"></Spinner>
@@ -70,12 +71,15 @@
 
               //기준에 맞춰 정렬하기
               vue.search.result.sort(function(a,b){
-                if (vue.sortcriteria=='0'){
+                if(vue.sortcriteria=='0'){
+                  null;
+                }
+                else if (vue.sortcriteria=='1'){
                   if (a.bookName<b.bookName) return -1;
                   if (a.bookName>b.bookName) return 1;
                   if (a.bookName===b.bookName) return 0;
                 }
-                else if (vue.sortcriteria=='1'){
+                else if (vue.sortcriteria=='2'){
                   if (a.mallCount<b.mallCount) return 1;
                   if (a.mallCount>b.mallCount) return -1;
                   if (a.mallCount===b.mallCount) return 0;
@@ -212,7 +216,7 @@
     margin-left: auto;
     margin-right: auto;
     padding:2px;
-    max-width: 15%;
+    max-width: 25%;
     border-style: inset;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     background: #8db596;

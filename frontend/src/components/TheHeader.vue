@@ -1,6 +1,6 @@
 <template>
   <header v-on:click="refresh()">
-    <h1><img src="logo.jpg"></h1>
+    <h1><img src="logo.png"></h1>
   </header>
 </template>
 
