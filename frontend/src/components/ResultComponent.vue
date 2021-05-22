@@ -2,7 +2,7 @@
   
   <div v-if="book!=''">
     <div class="book-container">
-      <div class="book-card" v-for="(result, resultkey) in book.result" v-bind:key="resultkey" v-bind:style="[book.mallCount==0?{'cursor':'default'}:{'cursor':'pointer'}, backShadow]" v-on:mouseover="changeHover(book)">
+      <div class="book-card" v-for="(result, resultkey) in book.result" v-bind:key="resultkey" v-bind:style="[result.mallCount==0?{'cursor':'default'}:{'cursor':'pointer'}, backShadow]" v-on:mouseover="changeHover(result)">
         <table class="book-aladin-info" v-on:click="moreView(result.mallCount, resultkey)">
           <tr>
             <td rowspan="4" class="book-aladin-img">

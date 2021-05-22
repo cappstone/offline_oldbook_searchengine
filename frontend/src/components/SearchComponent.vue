@@ -6,9 +6,9 @@
         <button v-on:click="getData"><i class="fas fa-search search-icon"></i></button>
       </div>
       <div class="select">
-        <input type="radio" id="aladin" value="0" v-model="sortcriteria"><label for="aladin">기본값(정확도순)</label>
-        <input type="radio" id="aladin" value="1" v-model="sortcriteria"><label for="aladin">제목순</label>
-        <input type="radio" id="yes" value="2" v-model="sortcriteria"><label for="yes">점포순</label>
+        <input type="radio" id="default" value="0" v-model="sortcriteria"><label for="default" title="검색어와 가장 관련이 깊은 책부터 보여줍니다.">정확도순</label>
+        <input type="radio" id="aladin" value="1" v-model="sortcriteria"><label for="aladin" title="abc->123->가나다 순으로 보여줍니다.">제목순</label>
+        <input type="radio" id="yes" value="2" v-model="sortcriteria"><label for="yes" title="가장 많은 점포에 분포한 책부터 보여줍니다.">점포순</label>
       </div>
     </div>
     <Spinner v-bind:isVisible="isLoading"></Spinner>
@@ -217,7 +217,7 @@
     margin-left: auto;
     margin-right: auto;
     padding:2px;
-    max-width: 25%;
+    max-width: 20%;
     border-style: inset;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     background: #8db596;

@@ -1,7 +1,7 @@
 <template>
   <div>
+    <Header/>
     <div class="header">
-      <Header/>
       <Search v-on:data-to-upper="dataEmit"></Search>
       <div class="warning" v-if="emittedbook!=''">
         <section style="color: #c64756">상황에 따라 재고 정보가 실시간으로 변동될 수 있습니다.</section>
