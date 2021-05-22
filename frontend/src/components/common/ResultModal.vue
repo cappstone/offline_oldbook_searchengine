@@ -88,7 +88,7 @@
         var tempmarker=this.markerlist;
         
         for (var i=0; i<this.mall.length; i++) {
-          this.location.keywordSearch(this.mall[i].mallName, function(data,status){
+          this.location.keywordSearch(this.mall[i].mallName=="YES24 수영점F1963"?"YES24 수영점":this.mall[i].mallName, function(data,status){
             if (status === kakao.maps.services.Status.OK) {
               for (var j=0; j<data.length; j++){
                 var marker= new kakao.maps.Marker({
@@ -117,7 +117,7 @@
         var tempwin=this.window;
         var tempmarker=this.markerlist[index];
 
-        this.location.keywordSearch(keyword, function(data,status){
+        this.location.keywordSearch(keyword=="YES24 수영점F1963"?"YES24 수영점":keyword, function(data,status){
           //console.log(data);
           if (status === kakao.maps.services.Status.OK) {
 
@@ -198,12 +198,12 @@
 
   .modal-default-button {
     width: 100%;
-    border-top: 1px solid #000000;
+    border: none;
     cursor: pointer;
   }
 
   .modal-default-button:focus {
-    border:none;
+    border-top:1px solid #557173;
     outline:none;
   }
 
