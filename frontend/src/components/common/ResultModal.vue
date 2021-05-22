@@ -167,7 +167,7 @@
 
   .modal-window {
     width: 70%;
-    max-height: 80%;
+    max-height: auto;
     margin: 0px auto;
     padding: 0px;
     background-color: #ffffff;
@@ -186,7 +186,7 @@
   }
 
   .modal-body {
-    height: 30vh;
+    height: 60vh;
     margin: 0;
     text-align: left;
     overflow-y: auto;
@@ -249,7 +249,7 @@
 
   #book-aladin-map {
     width: 50%;
-    height: 30vh;
+    height: 60vh;
     margin: 0;
     float: right;
   }
@@ -261,7 +261,12 @@
 
     #book-aladin-map {
       width:100%;
+      height: 30vh;
       float: none;
+    }
+
+    .modal-body {
+      height: 30vh;
     }
     
     .book-aladin-stock {

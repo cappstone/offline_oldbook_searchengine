@@ -17,7 +17,6 @@
 
 <script>
   import axios from 'axios'
-  import https from 'https'
   import Spinner from './common/Spinner.vue'
 
   export default {
@@ -43,9 +42,9 @@
             axios.get(vue.searchurl+"&mode=0",{timeout:60000}).then(function(response){
               vue.search=response.data;
               vue.search2=response2.data;
-              console.log(vue.search,vue.search2);
+              //console.log(vue.search,vue.search2);
               //알라딘 예스24 합치는 함수
-              if (vue.search.error){
+              if (vue.search.error || vue.search2.error){
                 vue.search=vue.search2;
               }
               else{
@@ -87,9 +86,9 @@
               });
 
               // mall_id 초기화
-              console.log(vue.search.result.length);
+              //console.log(vue.search.result.length);
               for (i=0;i<vue.search.result.length;i++){
-                console.log(vue.search.result[i].mall.length);
+                //console.log(vue.search.result[i].mall.length);
                 for (j=0;j<vue.search.result[i].mall.length;j++){
                   vue.search.result[i].mall[j].mall_id=j;
                 }
@@ -98,6 +97,8 @@
               if (vue.search.result=='' || vue.search.error){alert("찾는 데이타가 없습니다")}
               vue.$emit('data-to-upper',vue.search);
               vue.search='',vue.search2='' //초기화
+            }).catch(function(error){
+              alert('서버와 연결 할 수 없습니다.\n오류명:'+error)
             });
           }).catch(function(error) {
             //console.log(error);
