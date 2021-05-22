@@ -1,5 +1,9 @@
+'use strict'
+
 module.exports = {
-    devServer: {
-        disableHostCheck: true
+    configureWebpack: {
+        devServer: {
+            disableHostCheck: true
+        }
     }
 }
