@@ -40,9 +40,9 @@
       },
       getData: function() {
         const vue = this;
-        //vue.searchurl='http://bookapi.nendo.space/search?word='+String(vue.searchname)
+        vue.searchurl='http://bookapi.nendo.space/search?word='+String(vue.searchname)
         //vue.searchurl='http://172.30.1.7:23700/search?word='+String(vue.searchname); //공유기 서버
-        vue.searchurl='http://localhost:7000/search?word='+String(vue.searchname) //서버 맛갔을때 디버그용
+        //vue.searchurl='http://localhost:7000/search?word='+String(vue.searchname) //서버 맛갔을때 디버그용
         if (vue.searchname!='') {
           //크롤링
           //axios.all([axios(vue.searchurl+'&mode=0'),axios(vue.searchurl+'&mode=1')]).then(axios.spread(function(response,response2){
@@ -227,7 +227,7 @@
     margin-left: auto;
     margin-right: auto;
     padding:2px;
-    max-width: 20%;
+    max-width: 25%;
     border-style: inset;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     background: #8db596;
