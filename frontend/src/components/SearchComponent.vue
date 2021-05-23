@@ -105,7 +105,7 @@
 
               if (vue.search.result=='' || vue.search.error){alert("찾는 데이타가 없습니다")}
               vue.$emit('data-to-upper',vue.search);
-              vue.searchurl='',vue.search='',vue.search2='',vue.searchname=''; //초기화
+              vue.searchurl='',vue.search='',vue.search2=''; //초기화
             }).catch(function(error){
               alert('서버와 연결 할 수 없습니다.\n오류명:'+error);
             });
