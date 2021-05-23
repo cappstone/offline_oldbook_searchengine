@@ -11,7 +11,7 @@
         <input type="radio" id="yes" value="2" v-model="sortcriteria"><label for="yes" title="가장 많은 점포에 분포한 책부터 보여줍니다.">점포순</label>
       </div>
     </div>
-    <Spinner v-bind:isVisible="isLoading"></Spinner>
+    <Spinner v-bind:isVisible="isLoading" v-bind:message="message"></Spinner>
   </div>
 </template>
 
@@ -22,7 +22,15 @@
   export default {
     components:{Spinner},
 
-    data:function(){return {isLoading:false,axiosInterceptor:null,searchname:'',sortcriteria:'0',searchurl:'', search:'', search2:''}},
+    data:function(){ return {
+      isLoading:false,
+      axiosInterceptor:null,
+      searchname:'',
+      sortcriteria:'0',
+      searchurl:'', search:'', search2:'',
+      message:''
+      }
+    },
 
     methods: {
       checkEntered: function() {
@@ -38,13 +46,17 @@
         if (vue.searchname!='') {
           //크롤링
           //axios.all([axios(vue.searchurl+'&mode=0'),axios(vue.searchurl+'&mode=1')]).then(axios.spread(function(response,response2){
+          vue.message="YES24 불러오는 중입니다..."
           axios.get(vue.searchurl+"&mode=1",{timeout:60000}).then(function(response2){
+            vue.message="알라딘 불러오는 중입니다..."
             axios.get(vue.searchurl+"&mode=0",{timeout:60000}).then(function(response){
               vue.search=response.data;
               vue.search2=response2.data;
               //console.log(vue.search,vue.search2);
+
               //알라딘 예스24 합치는 함수
-              if (vue.search.error || vue.search2.error){
+              vue.message="데이타 통합 중입니다..."
+              if (vue.search.error){
                 vue.search=vue.search2;
               }
               else{
