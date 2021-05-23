@@ -102,9 +102,9 @@ class Yes24:
                     mall_info: Dict = {}
                     mall_info['mall_id'] = len(result[index]['mall'])
                     mall_info['mallName'] = "YES24 " + item['mall']
-                    mall_info['price'] = None if item['price'] == "None" else item['price'][:-1]
-                    mall_info['location'] = None if item['location'] == "None" else item['location']
-                    mall_info['stockCount'] = None if item['location'] == "None" else int(
+                    mall_info['price'] = "None" if item['price'] == "None" else item['price'][:-1]
+                    mall_info['location'] = "None" if item['location'] == "None" else item['location']
+                    mall_info['stockCount'] = "None" if item['location'] == "None" else int(
                         item['stockcount'][2:-2].strip())
                     result[index]['mall'].append(mall_info)
                     result[index]['mallCount'] = len(result[index]['mall'])

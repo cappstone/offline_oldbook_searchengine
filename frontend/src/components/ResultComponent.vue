@@ -2,7 +2,7 @@
   
   <div v-if="book!=''">
     <div class="book-container">
-      <div class="book-card" v-for="(result, resultkey) in book.result" v-bind:key="resultkey" v-bind:style="[((result.mallCount==0) || (result.mallCount==1 && result.mall[0].price==null))?{'cursor':'default'}:{'cursor':'pointer'}, backShadow]" v-on:mouseover="changeHover(result)">
+      <div class="book-card" v-for="(result, resultkey) in book.result" v-bind:key="resultkey" v-bind:style="[((result.mallCount==0) || (result.mallCount==1 && result.mall[0].price=='None'))?{'cursor':'default'}:{'cursor':'pointer'}, backShadow]" v-on:mouseover="changeHover(result)">
         <table class="book-aladin-info" v-on:click="moreView(result, resultkey)">
           <tr>
             <td rowspan="4" class="book-aladin-img">
@@ -16,7 +16,7 @@
             <td class="book-aladin-desc">{{result.description}}</td>
           </tr>
           <tr>
-            <td class="book-aladin-store-none" v-if='result.mallCount==0 || (result.mallCount==1 && !(result.mall[0].stock || result.mall[0].price))'><b>현재 모든 지점에 책이 없습니다.</b></td>
+            <td class="book-aladin-store-none" v-if='result.mallCount==0 || (result.mallCount==1 && result.mall[0].price=="None")'><b>현재 모든 지점에 책이 없습니다.</b></td>
             <td class="book-aladin-store-is" v-else><b>{{result.mallCount}}개의 지점에 책이 존재합니다. 평균가: {{pricemean[result.id]}}원</b></td>
           </tr>
         </table>
@@ -49,13 +49,13 @@ export default {
 
     methods:{
       moreView: function(mall,index){
-        if (mall.mallCount!=0 && !(mall.mallCount==1 && mall.mall[0].price==null)) {
+        if (mall.mallCount!=0 && !(mall.mallCount==1 && mall.mall[0].price=="None")) {
           this.showindex=index;
           this.showmodal=true;
         }
       },
       changeHover: function(count){
-        if (count.mallCount == 0 || (count.mallCount == 1 && count.mall[0].price==null)){
+        if (count.mallCount == 0 || (count.mallCount == 1 && count.mall[0].price=="None")){
           this.shadowColour='rgba(230,99,138,0.8)';
         }
         else{
