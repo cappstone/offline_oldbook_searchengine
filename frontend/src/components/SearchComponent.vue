@@ -8,7 +8,7 @@
       <div class="select">
         <input type="radio" id="default" value="0" v-model="sortcriteria"><label for="default" title="검색어와 가장 관련이 깊은 책부터 보여줍니다.">정확도순</label>
         <input type="radio" id="aladin" value="1" v-model="sortcriteria"><label for="aladin" title="abc->123->가나다 순으로 보여줍니다.">제목순</label>
-        <input type="radio" id="yes" value="2" v-model="sortcriteria"><label for="yes" title="가장 많은 점포에 분포한 책부터 보여줍니다.">점포순</label>
+        <input type="radio" id="yes" value="2" v-model="sortcriteria"><label for="yes" title="가장 많은 점포에 분포한 책부터 보여줍니다.">점포개수순</label>
       </div>
     </div>
     <Spinner v-bind:isVisible="isLoading" v-bind:message="message"></Spinner>
@@ -96,8 +96,9 @@
                 }
               });
 
-              // mall_id 초기화
+              // id,mall_id 초기화
               for (i=0;i<vue.search.result.length;i++){
+                vue.search.result[i].id=i;
                 for (j=0;j<vue.search.result[i].mall.length;j++){
                   vue.search.result[i].mall[j].mall_id=j;
                 }

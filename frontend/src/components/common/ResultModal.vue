@@ -4,7 +4,8 @@
       <div class="modal-window">
         <!-- 모달 헤더 -->
         <div class="modal-header">
-          <div style="color: #8db596; font-size: max(1.3vw,18px)">{{details.bookName}}</div>
+          <span class="book-copy" v-on:click="copyData(details)"><i class="far fa-copy fa-2x"></i></span>
+          <div class="book-name">{{details.bookName}}</div>
           <div>{{details.description}}</div>
         </div>
 
@@ -20,7 +21,7 @@
                 <table class="book-aladin-stock">
                   <tr>
                     <td class="book-aladin-location">위치: {{status.location}}</td>
-                    <td rowspan="5" class="book-aladin-price">{{status.price}}</td>
+                    <td rowspan="5" class="book-aladin-price">{{status.price}}원</td>
                   </tr>
                   <tr>
                     <td class="book-aladin-quality">품질: {{status.quality}}</td>
@@ -47,6 +48,7 @@
           <span>지점 이름을 누르면 해당 위치로 이동합니다.</span>
           <button class="modal-default-button" @click="$emit('close')"><i class="fas fa-times fa-3x"></i></button>
         </div>
+        <div id="toast">복사 완료했습니다.</div>
       </div>
     </section>
   </transition>
@@ -62,6 +64,8 @@
         location: {},
         mall: this.details.mall,
         address: {},
+        addresstext: '',
+        toastshow: false,
         window: {},
         markerlist: []
       }
@@ -77,6 +81,37 @@
     },
 
     methods: {
+      copyData(data) {
+        var textarea= document.createElement('textarea');
+        var text= String(data.bookName+'\n'+data.description);
+        for (var i in data.mall){
+          text+=String('\n\n'+data.mall[i].mallName+'에 '+data.mall[i].stockCount+'개 존재');
+          if (data.mall[i].stock){
+            for (var j in data.mall[i].stock){
+              text+=String('\n\n'+data.mall[i].stock[j].location+'에 위치, '
+                +data.mall[i].stock[j].quality+'급 품질\n'
+                +'가격 '+data.mall[i].stock[j].price);
+            }
+          } else {
+            text+=String('\n\n'+data.mall[i].location+'에 위치\n'
+            +'가격 '+data.mall[i].price+'원')
+          }
+        }
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+
+        const toaster = document.getElementById('toast');
+        this.toastshow = true;
+        toaster.classList.add('show');
+        setTimeout(()=>{
+          toaster.classList.remove('show');
+          this.toastshow=false;
+        },2700);
+      },
+
       initMap() {
         var mapContainer = document.getElementById("book-aladin-map"); // 지도를 표시할 div
         var mapOption = {
@@ -105,7 +140,6 @@
           });
           this.markerlist=tempmarker;
         }
-        //this.marker=tempmarker;
       },
 
       addKakaoMapScript() {
@@ -120,9 +154,9 @@
         var tempadd=this.address;
         var tempwin=this.window;
         var tempmarker=this.markerlist[index];
+        var tempaddtext=this.addtext;
         
         this.location.keywordSearch(keyword=="YES24 수영점F1963"?"YES24 수영점":keyword, function(data,status){
-          //console.log(data);
           if (status === kakao.maps.services.Status.OK) {
 
             // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
@@ -130,12 +164,11 @@
             var bounds = new kakao.maps.LatLngBounds();
 
             for (var i=0; i<data.length; i++) {
-              var juso='';
               var cor=[data[i].x,data[i].y]
 
               tempadd.coord2Address(cor[0],cor[1], function(result){
-                juso=result[0].road_address.address_name;
-                tempwin.setContent('<div style="width:200px;padding:5px;font-size:12px;color:#8db596;word-break:keep-all">' + juso + '</div>');
+                tempaddtext=result[0].road_address.address_name;
+                tempwin.setContent('<div style="width:200px;padding:5px;font-size:12px;color:#8db596;word-break:keep-all">' + tempaddtext + '</div>');
                 tempmarker.setPosition(new kakao.maps.LatLng(cor[1],cor[0]));
                 tempwin.open(tempmap,tempmarker);
               });
@@ -145,7 +178,6 @@
 
             // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
             tempmap.setBounds(bounds);
-
           }
         });
       }
@@ -158,7 +190,7 @@
     position: fixed;
     align-items: center;
     justify-content: center;
-    z-index: 9999;
+    z-index: 99;
     top: 0;
     left: 0;
     width: 100%;
@@ -186,6 +218,24 @@
     font-size:max(1vw,12px);
     font-weight: 800;
     margin: 10px;
+  }
+
+  .book-name {
+    max-width: 90%;
+    color: #8db596;
+    font-size: max(1.3vw,18px);
+    position: relative;
+    margin: 0 auto;
+    word-break: keep-all;
+  }
+
+  .book-copy {
+    position: absolute;
+    right: 16%;
+  }
+
+  .book-copy:active {
+    color: #4788de;
   }
 
   .modal-body {
@@ -260,15 +310,50 @@
     float: right;
   }
 
+  #toast {
+    position: absolute;
+    bottom: 88%;
+    left: 83%;
+    transform: translate(-50%, 10px);
+    border-radius: 30px;
+    overflow: hidden;
+    font-size: max(1vw,12px);
+    padding: 5px 5px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s, visibility 0.5s, transform 0.5s;
+    background: #557174;
+    color: white;
+    z-index: 999;
+  }
+  #toast.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+  }
+
   @media screen and (max-width:768px){
     .modal-window{
       width: 95%;
+    }
+
+    .book-name {
+      max-width: 84%;
+    }
+
+    .book-copy {
+      right: 5%;
     }
 
     #book-aladin-map {
       width:100%;
       height: 30vh;
       float: none;
+    }
+
+    #toast {
+      bottom: 30px;
+      left: 50%;
     }
 
     .modal-body {

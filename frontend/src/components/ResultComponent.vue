@@ -2,8 +2,8 @@
   
   <div v-if="book!=''">
     <div class="book-container">
-      <div class="book-card" v-for="(result, resultkey) in book.result" v-bind:key="resultkey" v-bind:style="[result.mallCount==0?{'cursor':'default'}:{'cursor':'pointer'}, backShadow]" v-on:mouseover="changeHover(result)">
-        <table class="book-aladin-info" v-on:click="moreView(result.mallCount, resultkey)">
+      <div class="book-card" v-for="(result, resultkey) in book.result" v-bind:key="resultkey" v-bind:style="[((result.mallCount==0) || (result.mallCount==1 && result.mall[0].price==null))?{'cursor':'default'}:{'cursor':'pointer'}, backShadow]" v-on:mouseover="changeHover(result)">
+        <table class="book-aladin-info" v-on:click="moreView(result, resultkey)">
           <tr>
             <td rowspan="4" class="book-aladin-img">
               <img v-bind:src="result.imgUrl">
@@ -16,7 +16,9 @@
             <td class="book-aladin-desc">{{result.description}}</td>
           </tr>
           <tr>
-            <td class="book-aladin-store-is" v-if="result.mallCount!=0"><b>{{result.mallCount}}개의 지점에 책이 존재합니다.</b></td>
+            <td class="book-aladin-store-is" v-if='(result.mallCount!=0) && (result.mallCount==1 && result.mall[0].price!=null)'>
+              <b>{{result.mallCount}}개의 지점에 책이 존재합니다. 평균가: {{pricemean[result.id]}}원</b>
+            </td>
             <td class="book-aladin-store-none" v-else><b>현재 모든 지점에 책이 없습니다.</b></td>
           </tr>
         </table>
@@ -26,26 +28,6 @@
       </div>
 
     </div>
-    <!--
-    <div id="yes" v-else>
-      <ul class="book-card" v-for="key in book[0]" v-bind:key="key" style="margin-bottom:1vw; padding:25px">
-        <li style="list-style-type: none">
-          <b style="font-size: 2vw">{{key.mall}}</b>
-          <ul v-for="resultkey in key.result" v-bind:key="resultkey">
-            <li v-if="resultkey!='검색 결과 없음'">
-              <b style="font-size: 1.2vw">{{resultkey.bookname}}</b>
-              <div>{{resultkey.description}}</div>
-              <div>{{resultkey.location}}이 {{resultkey.price}} 가격으로 있습니다.</div>
-              <br>
-            </li>
-            <li v-else>
-              <div>현재 재고가 없습니다.</div>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-    -->
   </div>
 </template>
 
@@ -58,7 +40,8 @@ export default {
       return {
         showindex: '',
         showmodal: false,
-        shadowColour: ''
+        shadowColour: '',
+        pricemean: []
       }
     },
 
@@ -67,14 +50,14 @@ export default {
     },
 
     methods:{
-      moreView: function(count,index){
-        if (count!=0) {
+      moreView: function(mall,index){
+        if (mall.mallCount!=0 && !(mall.mallCount==1 && mall.mall[0].price==null)) {
           this.showindex=index;
           this.showmodal=true;
-        } 
+        }
       },
       changeHover: function(count){
-        if (count.mallCount == 0){
+        if (count.mallCount == 0 || (count.mallCount == 1 && count.mall[0].price==null)){
           this.shadowColour='rgba(230,99,138,0.8)';
         }
         else{
@@ -90,6 +73,32 @@ export default {
           return;
         }
         document.documentElement.style.overflow="auto";
+      },
+      
+      book: function() {
+        this.pricemean=[];
+        for (var i in this.book.result){
+          var sum=0;
+          var count=0;
+
+          for (var j in this.book.result[i].mall){
+            if (this.book.result[i].mall[j].stock){
+              for (var k in this.book.result[i].mall[j].stock){
+                if (this.book.result[i].mall[j].stock[k]){
+                  sum+=parseInt((this.book.result[i].mall[j].stock[k].price).replace(",",""));
+                  count+=1;
+                }
+              }
+            }
+            else{
+              if (this.book.result[i].mall[j].price){
+                sum+=parseInt((this.book.result[i].mall[j].price).replace(",",""));
+                count+=1;
+              }
+            }
+          }
+          this.pricemean.push(parseInt(sum/count));
+        }
       }
     },
     
