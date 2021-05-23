@@ -55,7 +55,6 @@
               //console.log(vue.search,vue.search2);
 
               //알라딘 예스24 합치는 함수
-              vue.message="데이타 통합 중입니다..."
               if (vue.search.error){
                 vue.search=vue.search2;
               }
@@ -98,9 +97,7 @@
               });
 
               // mall_id 초기화
-              //console.log(vue.search.result.length);
               for (i=0;i<vue.search.result.length;i++){
-                //console.log(vue.search.result[i].mall.length);
                 for (j=0;j<vue.search.result[i].mall.length;j++){
                   vue.search.result[i].mall[j].mall_id=j;
                 }
@@ -108,9 +105,9 @@
 
               if (vue.search.result=='' || vue.search.error){alert("찾는 데이타가 없습니다")}
               vue.$emit('data-to-upper',vue.search);
-              vue.search='',vue.search2='' //초기화
+              vue.searchurl='',vue.search='',vue.search2='',vue.searchname=''; //초기화
             }).catch(function(error){
-              alert('서버와 연결 할 수 없습니다.\n오류명:'+error)
+              alert('서버와 연결 할 수 없습니다.\n오류명:'+error);
             });
           }).catch(function(error) {
             //console.log(error);

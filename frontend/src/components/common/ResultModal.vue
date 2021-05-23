@@ -135,7 +135,7 @@
 
               tempadd.coord2Address(cor[0],cor[1], function(result){
                 juso=result[0].road_address.address_name;
-                tempwin.setContent('<div style="width:250px;padding:5px;font-size:12px;color:#8db596;">' + juso + '</div>');
+                tempwin.setContent('<div style="width:200px;padding:5px;font-size:12px;color:#8db596;word-break:keep-all">' + juso + '</div>');
                 tempmarker.setPosition(new kakao.maps.LatLng(cor[1],cor[0]));
                 tempwin.open(tempmap,tempmarker);
               });
