@@ -16,10 +16,7 @@
             <td class="book-aladin-desc">{{result.description}}</td>
           </tr>
           <tr>
-            <td class="book-aladin-store-none" v-if='result.mallCount==0'>
-              <b>현재 모든 지점에 책이 없습니다.</b>
-            </td>
-            <td class="book-aladin-store-none" v-else-if='result.mallCount==1 && result.mall[0].price==null'><b>현재 모든 지점에 책이 없습니다.</b></td>
+            <td class="book-aladin-store-none" v-if='result.mallCount==0 || (result.mallCount==1 && !(result.mall[0].stock || result.mall[0].price))'><b>현재 모든 지점에 책이 없습니다.</b></td>
             <td class="book-aladin-store-is" v-else><b>{{result.mallCount}}개의 지점에 책이 존재합니다. 평균가: {{pricemean[result.id]}}원</b></td>
           </tr>
         </table>
