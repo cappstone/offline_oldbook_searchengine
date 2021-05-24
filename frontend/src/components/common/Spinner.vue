@@ -5,7 +5,7 @@
 <template>
     <div v-if="isVisible" class="loader-overlay">
         <div class="loader"></div>
-        <span class="text" v-html="text"></span>
+        <span class="text">{{message}}</span>
     </div>
 </template>
 
@@ -14,7 +14,7 @@
         name: "Spinner",
         props: {
             isVisible: {type: Boolean, required: true},
-            text: {type: String, required: false, default: ""},
+            message: {type:String}
         },
 }
 </script>
@@ -34,7 +34,7 @@
         span.text {
             display: inline-block;
             position: relative;
-            top: 50%;
+            top: 60%;
             left: 50%;
             transform: translate(-50%,-50%);
             color: #fff;

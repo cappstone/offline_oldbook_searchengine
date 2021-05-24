@@ -7,11 +7,11 @@
       </div>
       <div class="select">
         <input type="radio" id="default" value="0" v-model="sortcriteria"><label for="default" title="검색어와 가장 관련이 깊은 책부터 보여줍니다.">정확도순</label>
-        <input type="radio" id="aladin" value="1" v-model="sortcriteria"><label for="aladin" title="abc->123->가나다 순으로 보여줍니다.">제목순</label>
-        <input type="radio" id="yes" value="2" v-model="sortcriteria"><label for="yes" title="가장 많은 점포에 분포한 책부터 보여줍니다.">점포순</label>
+        <input type="radio" id="aladin" value="1" v-model="sortcriteria"><label for="aladin" title="123->abc->가나다 순으로 보여줍니다.">제목순</label>
+        <input type="radio" id="yes" value="2" v-model="sortcriteria"><label for="yes" title="가장 많은 점포에 분포한 책부터 보여줍니다.">점포개수순</label>
       </div>
     </div>
-    <Spinner v-bind:isVisible="isLoading"></Spinner>
+    <Spinner v-bind:isVisible="isLoading" v-bind:message="message"></Spinner>
   </div>
 </template>
 
@@ -22,7 +22,15 @@
   export default {
     components:{Spinner},
 
-    data:function(){return {isLoading:false,axiosInterceptor:null,searchname:'',sortcriteria:'0',searchurl:'', search:'', search2:''}},
+    data:function(){ return {
+      isLoading:false,
+      axiosInterceptor:null,
+      searchname:'',
+      sortcriteria:'0',
+      searchurl:'', search:'', search2:'',
+      message:''
+      }
+    },
 
     methods: {
       checkEntered: function() {
@@ -38,13 +46,16 @@
         if (vue.searchname!='') {
           //크롤링
           //axios.all([axios(vue.searchurl+'&mode=0'),axios(vue.searchurl+'&mode=1')]).then(axios.spread(function(response,response2){
+          vue.message="YES24 불러오는 중입니다..."
           axios.get(vue.searchurl+"&mode=1",{timeout:60000}).then(function(response2){
+            vue.message="알라딘 불러오는 중입니다..."
             axios.get(vue.searchurl+"&mode=0",{timeout:60000}).then(function(response){
               vue.search=response.data;
               vue.search2=response2.data;
               //console.log(vue.search,vue.search2);
+
               //알라딘 예스24 합치는 함수
-              if (vue.search.error || vue.search2.error){
+              if (vue.search.error){
                 vue.search=vue.search2;
               }
               else{
@@ -85,10 +96,9 @@
                 }
               });
 
-              // mall_id 초기화
-              //console.log(vue.search.result.length);
+              // id,mall_id 초기화
               for (i=0;i<vue.search.result.length;i++){
-                //console.log(vue.search.result[i].mall.length);
+                vue.search.result[i].id=i;
                 for (j=0;j<vue.search.result[i].mall.length;j++){
                   vue.search.result[i].mall[j].mall_id=j;
                 }
@@ -96,9 +106,9 @@
 
               if (vue.search.result=='' || vue.search.error){alert("찾는 데이타가 없습니다")}
               vue.$emit('data-to-upper',vue.search);
-              vue.search='',vue.search2='' //초기화
+              vue.searchurl='',vue.search='',vue.search2=''; //초기화
             }).catch(function(error){
-              alert('서버와 연결 할 수 없습니다.\n오류명:'+error)
+              alert('서버와 연결 할 수 없습니다.\n오류명:'+error);
             });
           }).catch(function(error) {
             //console.log(error);
@@ -217,7 +227,7 @@
     margin-left: auto;
     margin-right: auto;
     padding:2px;
-    max-width: 20%;
+    max-width: 25%;
     border-style: inset;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     background: #8db596;

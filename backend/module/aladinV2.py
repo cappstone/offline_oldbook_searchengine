@@ -223,7 +223,7 @@ class Aladin:
                 # 매장안에 있는 책의 정보들 json으로 저장
                 item: Dict = {
                     "stock_id": index,  # 몇번째 책 인지?
-                    "price": price,  # 이 책의 가격은?
+                    "price": price[:-1],  # 이 책의 가격은?
                     "quality": quality,  # 이책의 상태는?
                     "location": location  # 책의 위치가 있는 곳
                 }
