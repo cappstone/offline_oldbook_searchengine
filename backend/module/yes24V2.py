@@ -3,11 +3,12 @@ YES24 OfflineShop Parse Module by Sc0_Nep
 '''
 from typing import Dict, List
 from bs4 import BeautifulSoup
-from collections import defaultdict
+# from collections import defaultdict
 
 import requests
 import asyncio
 import json
+import datetime
 import time
 
 # yes24 중고몰 관련된 URL
@@ -32,6 +33,9 @@ search_result: Dict = {}
 
 class Yes24:
     def __init__(self, keyword) -> None:
+        # 크롤링 시작한 타임기록
+        now = datetime.datetime.now()
+
         # mall정보 가져오기
         mall_names: List[str] = list(malls.keys())  # 중고몰 이름
         mall_codes: List[str] = list(malls.values())  # 중고몰 코드
@@ -48,6 +52,8 @@ class Yes24:
         # json데이터 dict로정의 (크롤링 하고 처리된 데이터들 담는 곳)
         self.data: Dict = {
             "keyword": keyword,
+            "serviceType": "Yes24",
+            "crawledDate": now.strftime('%Y-%m-%d %H:%M:%S'),
             "searchTotal": "",
         }
 
@@ -57,7 +63,7 @@ class Yes24:
         # 검색된 책 들의 검색결과를 정리하는 리스트
         result: List = []
 
-        # 임시로 저장하는 temp리스트
+        # 크롤링한 결과를 임시로 저장하는 temp리스트
         temp: List = []
 
         # 조합된 url들 함수에 넣고 크롤링하기
@@ -67,8 +73,9 @@ class Yes24:
         # print(self.books)
         # print(temp)
 
+        # temp안에 있는 매장 개수만큼 반복
         for mall in temp:
-
+            # 매장 데이터 안에 있는 책 결과들 만금 반복
             for item in mall['result']:
 
                 # 검색 결과 없음 뜨는지 확인(해당 매장에 아무 결과 안뜨는 경우임)
@@ -77,8 +84,9 @@ class Yes24:
                     # 책이 books에 있는지 없는지 중복확인하고 없으면 defaultdict 생성해서 self.result 리스트에 추가
                     if item['bookname'] not in books:
 
-                        # self.result 리스트에 넣을 defaultdict 생성
-                        book_info: defaultdict = defaultdict(str)
+                        # self.result 리스트에 넣을 dict 생성
+                        # book_info: defaultdict = defaultdict(str)
+                        book_info: Dict = {}
                         book_info['id'] = len(books)
                         book_info['bookName'] = item['bookname']
                         book_info['description'] = item['description']
@@ -102,9 +110,9 @@ class Yes24:
                     mall_info: Dict = {}
                     mall_info['mall_id'] = len(result[index]['mall'])
                     mall_info['mallName'] = "YES24 " + item['mall']
-                    mall_info['price'] = "None" if item['price'] == "None" else item['price'][:-1]
-                    mall_info['location'] = "None" if item['location'] == "None" else item['location']
-                    mall_info['stockCount'] = "None" if item['location'] == "None" else int(
+                    mall_info['price'] = None if item['price'] == "None" else item['price'][:-1]
+                    mall_info['location'] = None if item['location'] == "None" else item['location']
+                    mall_info['stockCount'] = None if item['location'] == "None" else int(
                         item['stockcount'][2:-2].strip())
                     result[index]['mall'].append(mall_info)
                     result[index]['mallCount'] = len(result[index]['mall'])
@@ -112,7 +120,8 @@ class Yes24:
                     pass
 
         # defaultdict 형태를 dict로 형태로 컨버팅하기
-        result = [dict(item) for item in result]
+        # result = [dict(item) for item in result]
+        result = [item for item in result]
 
         # 검색결과를 dict에 넣기
         self.data["searchTotal"] = len(result)  # 검색된 개수를 result아이템갯수로

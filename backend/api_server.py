@@ -4,8 +4,14 @@ from flask_cors import CORS
 from module.aladinV2 import Aladin
 from module.yes24V2 import Yes24
 # import module.aladin as Aladin
-#import module.yes24 as Yes24
+# import module.yes24 as Yes24
+
 import json
+import redis
+
+
+# redis 연결
+rd = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 
 class Search(Resource):
@@ -17,13 +23,34 @@ class Search(Resource):
             parser.add_argument('mode', required=True,
                                 type=int, help='Please enter mode')
             args = parser.parse_args()
-            result = ''
+
+            # redis에 값이 있는지 없는지 확인
+            rd_aladin = rd.get(f"aladin - {args['word']}")
+            rd_yes24 = rd.get(f"yes24 - {args['word']}")
+
+            result = ""
+            crawl_type = ""
             if args['mode'] == 0:
-                aladin = Aladin(args['word'])
-                result = aladin.result()
+                if rd_aladin is True:
+                    result = rd_aladin
+                else:
+                # redis에 없는 경우(크롤링 프로세스 진행)
+                    crawl_type = "aladin"
+                    aladin = Aladin(args['word'])
+                    # redis에 저장 (예시: "yes24 - 파이썬" : 데이터)
+                    rd.set(f"{crawl_type} - {args['word']}", result)
+                    result = aladin.result()
             elif args['mode'] == 1:
-                yes24 = Yes24(args['word'])
-                result = yes24.result()
+                if rd_yes24 is True:
+                    result = rd_yes24
+                else:
+                # redis에 없는 경우(크롤링 프로세스 진행)
+                    crawl_type = "yes24"
+                    yes24 = Yes24(args['word'])
+                    # redis에 저장 (예시: "yes24 - 파이썬" : 데이터)
+                    rd.set(f"{crawl_type} - {args['word']}", result)
+                    result = yes24.result()
+
             """
             elif args['mode'] == "common":
             """

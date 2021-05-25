@@ -9,6 +9,7 @@ from asyncio.tasks import gather
 from bs4 import BeautifulSoup
 import bs4.element
 from .url_request import request
+import datetime
 import requests
 import json
 import time
@@ -27,6 +28,9 @@ class Aladin:
     search_result: Dict = None
 
     def __init__(self, keyword: str) -> None:
+        # 크롤링 시작한 타임기록
+        now = datetime.datetime.now()
+
         starttime = time.time()
         print("검색키워드: " + keyword + " - AladinV2 크롤링시작")
 
@@ -64,6 +68,8 @@ class Aladin:
             # 검색결과에 대해서 dict타입의 형태로 작성하기
             Aladin.search_result = {
                 "keyword": keyword,
+                "serviceType": "Aladin",
+                "crawledDate": now.strftime('%Y-%m-%d %H:%M:%S'),
                 "searchTotal": len(result),
                 "result": result
             }
