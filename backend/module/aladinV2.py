@@ -69,7 +69,7 @@ class Aladin:
             Aladin.search_result = {
                 "keyword": keyword,
                 "serviceType": "Aladin",
-                "crawledDate": now.strftime('%Y-%m-%d %H:%M:%S'),
+                "crawledDate": now.strftime('%Y%m%d %H%M%S'),
                 "searchTotal": len(result),
                 "result": result
             }

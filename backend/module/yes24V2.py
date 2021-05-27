@@ -36,6 +36,9 @@ class Yes24:
         # 크롤링 시작한 타임기록
         now = datetime.datetime.now()
 
+        start = time.time()
+        print("검색키워드: " + keyword + " - yes24V2크롤링시작")
+
         # mall정보 가져오기
         mall_names: List[str] = list(malls.keys())  # 중고몰 이름
         mall_codes: List[str] = list(malls.values())  # 중고몰 코드
@@ -53,7 +56,7 @@ class Yes24:
         self.data: Dict = {
             "keyword": keyword,
             "serviceType": "Yes24",
-            "crawledDate": now.strftime('%Y-%m-%d %H:%M:%S'),
+            "crawledDate": now.strftime('%Y%m%d %H%M%S'),
             "searchTotal": "",
         }
 
@@ -121,6 +124,7 @@ class Yes24:
 
         # defaultdict 형태를 dict로 형태로 컨버팅하기
         # result = [dict(item) for item in result]
+        print("time :", time.time() - start)
         result = [item for item in result]
 
         # 검색결과를 dict에 넣기
